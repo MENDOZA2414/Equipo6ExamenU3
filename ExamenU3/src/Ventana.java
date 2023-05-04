@@ -1,41 +1,34 @@
-import java.awt.EventQueue;
+import java.awt.Color;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 public class Ventana {
-
+	
 	private JFrame frame;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Ventana window = new Ventana();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the application.
-	 */
+	private Imagen imagenes;
+	private String rutaRecursos = "Resources/";
 	public Ventana() {
-		initialize();
+		inicializar();
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
+	private void inicializar() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	}
+		frame.setVisible(true);
+		frame.setBounds(0, 0, 800, 500);
+		frame.setLocationRelativeTo(null);
+		frame.getContentPane().setLayout(null);
+		
+		JPanel panel = new JPanel();
+		panel.setBounds(0, 0, frame.getWidth(), frame.getHeight());
+		panel.setBackground(Color.black);
+		frame.getContentPane().add(panel);
+		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		imagenes = new Imagen(rutaRecursos + "fondo.png",panel);
+		
+		panel.repaint();
+		panel.revalidate();
+	}
 }
