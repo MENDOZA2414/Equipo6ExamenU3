@@ -16,6 +16,7 @@ public class Ventana {
         frame.setBackground(Color.white);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
-        frame.setVisible(true);  
+        frame.setVisible(true); 
+        
     }
 }
