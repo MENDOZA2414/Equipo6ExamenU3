@@ -11,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Login {
-	private Imagen imagen;
 	private JTextField txtfUsuario ;
 	private JPasswordField txtfContraseña;
 	private Font fuente = new Font("Inter", Font.PLAIN, 16);
@@ -24,17 +23,17 @@ public class Login {
 	public Login(JFrame frame) {
 		JPanel panel = new JPanel();
 		panel.setBounds(0, 0, 1280, 832);
-		imagen = new Imagen("fondoLogin2.png",1280 ,832 , panel);
+		new Imagen("fondoLogin2.png",1280 ,832 , panel);
 
         JPanel circulo = new JPanel();
         circulo.setBounds(516, 146, 250, 250);
         circulo.setOpaque(false);
-		imagen = new Imagen("circulo.png",250,250, circulo);
+		new Imagen("circulo.png",250,250, circulo);
 		
 		JPanel logo = new JPanel();
 		logo.setBounds(525, 180, 230, 230);
 		logo.setOpaque(false);
-		imagen = new Imagen("logo.png",180,180, logo);
+		new Imagen("logo1.png",180,180, logo);
 		
 		txtfUsuario = new JTextField("Usuario");
 		txtfUsuario.setFont(fuente);

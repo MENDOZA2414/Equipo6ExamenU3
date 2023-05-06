@@ -14,6 +14,8 @@ public class Ventana extends JFrame {
     Login login; 
     Inicio inicio;
     private int contador = 0;
+    private JPanel panelPrincipal;
+    private JLabel modulo;
     
     public Ventana() {
         setBounds(0, 0, 1280, 832);
@@ -24,15 +26,14 @@ public class Ventana extends JFrame {
         
         //mostrarInicio();
         pantallaCarga();
-        
-        repaint();
+
         setVisible(true);
     }
     public void pantallaCarga() {
     	Carga carga = new Carga();
 	    add(carga);
 	    Tiempo(carga);
-	  
+	   
     }
     
   	public void Tiempo(JPanel panelCarga) {
@@ -41,8 +42,9 @@ public class Ventana extends JFrame {
   			@Override
   			public void run() {
   				contador++;
-  				if(contador == 3) {
-  					mostrarLogin();
+  				if(contador == 1) {
+  					mostrarMenu();
+  					//mostrarLogin();
   					panelCarga.setVisible(false);
                     repaint();
   					timer.cancel();	
@@ -59,9 +61,14 @@ public class Ventana extends JFrame {
   		login = new Login(this);
 	}
   	
-  	public void mostrarInicio() {
+  	public void mostrarMenu() {
   		agregarMenu();
-        agregarBarra();
+  		agregarBarra();
+  	}
+  	
+  	public void mostrarInicio() {
+  		agregarBarra();
+  		inicio = new Inicio(this);
   	}
     
     public void agregarBarra() {
@@ -69,6 +76,31 @@ public class Ventana extends JFrame {
     	panel.setLayout(null);
         panel.setBounds(0, 0, 1280, 100);
         panel.setBackground(Color.decode("#26282B"));
+        
+	    JLabel mensaje= new JLabel("BIENVENIDO ADMIN", JLabel.LEFT);
+	    mensaje.setFont(new Font("Inter", Font.PLAIN, 18));
+	    mensaje.setBounds(110, 35, 550, 50);
+	    mensaje.setForeground(Color.white);
+	    mensaje.setOpaque(false);
+        
+		
+		JButton logo = new JButton(null, new ImageIcon("Resources/iconoInicio.png"));
+		logo.setBounds(10,10, 80, 80);
+		logo.setOpaque(true);
+		logo.setContentAreaFilled(false); 
+		logo.setBorderPainted(false);
+		logo.setFocusPainted(false);
+		panel.add(logo);
+		
+		JButton exit = new JButton(null, new ImageIcon("Resources/exit.png"));
+		exit.setBounds(1200, 20, 60, 60);
+		exit.setOpaque(true);
+		exit.setContentAreaFilled(false); 
+		exit.setBorderPainted(false);
+		exit.setFocusPainted(false);
+		panel.add(exit);
+		
+        panel.add(mensaje);
         add(panel);
         repaint();
     }
@@ -79,12 +111,12 @@ public class Ventana extends JFrame {
         panel.setBounds(0, 100, 242, 732);
         panel.setBackground(Color.white);
        
-        JLabel platillos = new JLabel("PLATILLOS", JLabel.CENTER);
-        platillos.setFont(new Font("Inter", Font.PLAIN, 20));
-        platillos.setForeground(Color.white);
-        platillos.setBounds(0, 0, 242, 70);
-        platillos.setBackground(Color.decode("#9F9F9F"));
-        platillos.setOpaque(true);
+        modulo= new JLabel("PLATILLOS", JLabel.CENTER);
+        modulo.setFont(new Font("Inter", Font.PLAIN, 25));
+        modulo.setForeground(Color.white);
+        modulo.setBounds(0, 0, 242, 80);
+        modulo.setBackground(Color.decode("#9F9F9F"));
+        modulo.setOpaque(true);
         
         //Boton consultar//
         JButton botonconsultar = new JButton("   Consultar");
@@ -154,12 +186,32 @@ public class Ventana extends JFrame {
         
         ImageIcon iconoeditar = new ImageIcon("Resources/editar.png");
         botoneditar.setIcon(iconoeditar);
-       
-        panel.add(platillos);
+
+        panel.add(modulo);
         panel.add(botonconsultar);
         panel.add(botoncrear);
         panel.add(botoneditar);
         add(panel);
         repaint();
+        
+        panelPrincipal = new JPanel(null);
+        panelPrincipal.setBounds(100, 100, 1180, 732);
+        panelPrincipal.setBackground(Color.decode("#EBEBEB"));
+
+        JPanel logo = new JPanel();
+		logo.setBounds(360, 100, 630, 630);
+		logo.setOpaque(false);
+		new Imagen("logo.png", logo);
+		
+		panelPrincipal.add(logo);
+        add(panelPrincipal);
+    }
+    
+    public void actualizar(){
+    	repaint();
+    	revalidate();
+    	
     }
 }
+
+

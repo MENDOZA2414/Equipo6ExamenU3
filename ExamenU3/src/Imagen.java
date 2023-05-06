@@ -21,5 +21,6 @@ public class Imagen {
         ImageIcon imagen2 = new ImageIcon(imagenRedimensionada);
         JLabel carga = new JLabel(imagen2);
         pantalla.add(carga);
+       
     }  
 }
