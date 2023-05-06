@@ -7,12 +7,14 @@ import javax.swing.JTextField;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Login {
 	private Imagen imagen;
 	private JTextField txtfUsuario ;
 	private JPasswordField txtfContraseña;
-	private Font fuente = new Font("Actor", Font.PLAIN, 16);
+	private Font fuente = new Font("Inter", Font.PLAIN, 16);
 	private Color colorFuente = Color.decode("#666666");
 	private Color colorFondo = Color.white;
 	private Color colorBoton = Color.decode("#4B4F55");
@@ -47,14 +49,24 @@ public class Login {
         txtfContraseña.setBounds(458,495,358,48);
         txtfContraseña.setBackground(colorFondo);
         txtfContraseña.setBorder(BorderFactory.createLineBorder(colorFondo)); 
-		
-       
         
-        iniciar = new JButton("Iniciar"); //Boton iniciar sesión
+        iniciar = new JButton("Iniciar Sesion"); //Boton iniciar sesión
 		iniciar.setFont(fuente);
-		iniciar.setForeground(Color.gray);
+		iniciar.setForeground(Color.WHITE);
 		iniciar.setBounds(505,603,265,60);
-		iniciar.setBackground(colorBoton);
+		//iniciar.setBackground(colorBoton);
+        iniciar.setContentAreaFilled(false); 
+        iniciar.setBorderPainted(true);
+        iniciar.setFocusPainted(false);
+
+		iniciar.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Iniciar Sesion");
+			}
+			
+		});
        
 		frame.add(txtfUsuario);
 		frame.add(txtfContraseña);

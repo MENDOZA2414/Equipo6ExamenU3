@@ -21,6 +21,6 @@ public class Carga extends JPanel {
 		fondo.setLocation(0,150);
 		add(fondo);
 		
-		Imagen splash = new Imagen("Resources/intro.gif", 400,300,fondo);
+		Imagen splash = new Imagen("Resources\\intro.gif", 400,300,fondo);
 	}
 }

@@ -23,4 +23,3 @@ public class Imagen {
         pantalla.add(carga);
     }  
 }
- 

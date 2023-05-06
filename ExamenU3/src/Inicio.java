@@ -6,6 +6,7 @@ public class Inicio {
     JFrame frame;
     JPanel centro;
     public Inicio(JFrame frame){
+
     	this.frame = frame;
         centro = new JPanel(null);
         centro.setBounds(0, 100, 1280, 732);
@@ -36,6 +37,7 @@ public class Inicio {
         centro.add(ordenes);
 
         frame.getContentPane().add(centro);
+        
     }
     
     public void remover() {
