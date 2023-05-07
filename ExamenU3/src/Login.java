@@ -6,6 +6,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,12 +19,23 @@ public class Login {
 	private Color colorFondo = Color.white;
 	private Color colorBoton = Color.decode("#4B4F55");
 	
+	private JFrame frame;
 	private JButton iniciar;
-	
+	private JPanel panel;
+	private JPanel fondo;
+
 	public Login(JFrame frame) {
-		JPanel panel = new JPanel();
+		
+		this.frame = frame;
+		
+		fondo = new JPanel();
+		fondo.setBounds(0, 0, 1280, 832);
+		new Imagen("fondoLogin.png",1280 ,832 , fondo);
+
+		panel = new JPanel(null);
 		panel.setBounds(0, 0, 1280, 832);
-		new Imagen("fondoLogin2.png",1280 ,832 , panel);
+		panel.setOpaque(true);
+		panel.setBackground(new Color(0,0,0,0));
 
         JPanel circulo = new JPanel();
         circulo.setBounds(516, 146, 250, 250);
@@ -33,7 +45,7 @@ public class Login {
 		JPanel logo = new JPanel();
 		logo.setBounds(525, 180, 230, 230);
 		logo.setOpaque(false);
-		new Imagen("logo1.png",180,180, logo);
+		new Imagen("logo.png",180,180, logo);
 		
 		txtfUsuario = new JTextField("Usuario");
 		txtfUsuario.setFont(fuente);
@@ -53,28 +65,30 @@ public class Login {
 		iniciar.setFont(fuente);
 		iniciar.setForeground(Color.WHITE);
 		iniciar.setBounds(505,603,265,60);
-		//iniciar.setBackground(colorBoton);
-        iniciar.setContentAreaFilled(false); 
+		iniciar.setBackground(colorBoton);
+        iniciar.setContentAreaFilled(true); 
         iniciar.setBorderPainted(true);
         iniciar.setFocusPainted(false);
-
-		iniciar.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Iniciar Sesion");
-			}
-			
-		});
-       
-		frame.add(txtfUsuario);
-		frame.add(txtfContraseña);
-		frame.add(iniciar);
 		
-		frame.getContentPane().add(logo);
-		frame.getContentPane().add(circulo);
-		frame.getContentPane().add(panel);
-        
+		panel.add(txtfUsuario);
+		panel.add(txtfContraseña);
+		panel.add(iniciar);
+		
+		panel.add(logo);
+		panel.add(circulo);
+		frame.add(panel);
+		frame.add(fondo);
 	}
+
+	public JButton getIniciarSesion() {
+		return iniciar;
+	}
+
+	public void remover() {
+    	frame.remove(panel);
+		frame.remove(fondo);
+    }
+	
+
 }
 

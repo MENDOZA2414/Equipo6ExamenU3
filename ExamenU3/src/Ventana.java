@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Menu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Timer;
@@ -9,31 +10,40 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
+import javax.swing.UIManager;
+
 
 public class Ventana extends JFrame {
     Login login; 
     Inicio inicio;
+    JButton logo;
+    JPanel logoimg;
     private int contador = 0;
     private JPanel panelPrincipal;
-    private JLabel modulo;
+    private JLabel modulo = new JLabel("", JLabel.CENTER);
+    private JPanel panelMenu;
+    private JPanel panelbarra = new JPanel();
+    
     
     public Ventana() {
+
         setBounds(0, 0, 1280, 832);
         setLayout(null);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         
-        //mostrarInicio();
+        
         pantallaCarga();
-
+        
+        actualizar();
         setVisible(true);
     }
+
     public void pantallaCarga() {
     	Carga carga = new Carga();
 	    add(carga);
 	    Tiempo(carga);
-	   
     }
     
   	public void Tiempo(JPanel panelCarga) {
@@ -43,8 +53,8 @@ public class Ventana extends JFrame {
   			public void run() {
   				contador++;
   				if(contador == 1) {
-  					mostrarMenu();
-  					//mostrarLogin();
+  					
+  					mostrarLogin();
   					panelCarga.setVisible(false);
                     repaint();
   					timer.cancel();	
@@ -56,62 +66,142 @@ public class Ventana extends JFrame {
   		};
   		timer.schedule(tarea,0,1000);
   	}
+
   	
   	public void mostrarLogin() {
+
   		login = new Login(this);
+        login.getIniciarSesion().addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                login.remover();
+                mostrarInicio();
+            }
+            
+        });
 	}
-  	
-  	public void mostrarMenu() {
-  		agregarMenu();
-  		agregarBarra();
-  	}
   	
   	public void mostrarInicio() {
   		agregarBarra();
   		inicio = new Inicio(this);
+        inicio.getplatillosboton().addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                
+                logo.setEnabled(true);
+                inicio.remover();
+                modulo.setText("PLATILLOS");
+                agregarMenu();
+                agregarBarra();
+                
+            }
+            
+        });
+
+        inicio.getordenesBoton().addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+
+                logo.setEnabled(true);
+                inicio.remover();
+                modulo.setText("ORDENES");
+                agregarMenu();
+                agregarBarra();
+        
+            }
+            
+        });
+
+        repaint();
   	}
     
     public void agregarBarra() {
-    	JPanel panel = new JPanel();
-    	panel.setLayout(null);
-        panel.setBounds(0, 0, 1280, 100);
-        panel.setBackground(Color.decode("#26282B"));
+
+        panelbarra.setLayout(null);
+        panelbarra.setBounds(0, 0, 1280, 100);
+        panelbarra.setBackground(Color.decode("#26282B"));
         
-	    JLabel mensaje= new JLabel("BIENVENIDO ADMIN", JLabel.LEFT);
+	    JLabel mensaje = new JLabel("BIENVENIDO ADMIN", JLabel.LEFT);
 	    mensaje.setFont(new Font("Inter", Font.PLAIN, 18));
 	    mensaje.setBounds(110, 35, 550, 50);
 	    mensaje.setForeground(Color.white);
 	    mensaje.setOpaque(false);
         
-		
-		JButton logo = new JButton(null, new ImageIcon("Resources/iconoInicio.png"));
+		logo = new JButton(null, new ImageIcon("Resources/iconoInicio.png"));
 		logo.setBounds(10,10, 80, 80);
 		logo.setOpaque(true);
 		logo.setContentAreaFilled(false); 
 		logo.setBorderPainted(false);
 		logo.setFocusPainted(false);
-		panel.add(logo);
+        logo.setEnabled(false);
+        logo.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+
+                remove(panelMenu);
+                remove(panelPrincipal);
+                mostrarInicio();
+                repaint();
+
+            }
+            
+        });
+        
+		panelbarra.add(logo);
 		
 		JButton exit = new JButton(null, new ImageIcon("Resources/exit.png"));
-		exit.setBounds(1200, 20, 60, 60);
+		exit.setBounds(1200, 10, 60, 60);
 		exit.setOpaque(true);
 		exit.setContentAreaFilled(false); 
 		exit.setBorderPainted(false);
 		exit.setFocusPainted(false);
-		panel.add(exit);
+
+        exit.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                /*remove(panelPrincipal);
+                remove(panelMenu);
+                remove(panelbarra);
+                mostrarLogin();
+                repaint();*/
+
+                
+                remove(panelPrincipal);
+                remove(panelMenu);
+                remove(panelbarra);
+                
+                repaint();
+            }
+            
+        });
+
+        
+        JLabel Salir = new JLabel("Salir", JLabel.LEFT);
+	    Salir.setFont(new Font("Inter", Font.PLAIN, 18));
+	    Salir.setBounds(1208, 55, 550, 50);
+	    Salir.setForeground(Color.white);
+	    Salir.setOpaque(false);
 		
-        panel.add(mensaje);
-        add(panel);
+		panelbarra.add(exit);
+        panelbarra.add(mensaje);
+        panelbarra.add(Salir);
+        add(panelbarra);
         repaint();
+        
     }
     
     public void agregarMenu() {
-    	JPanel panel = new JPanel();
-    	panel.setLayout(null);
-        panel.setBounds(0, 100, 242, 732);
-        panel.setBackground(Color.white);
+
+    	panelMenu = new JPanel();
+    	panelMenu.setLayout(null);
+        panelMenu.setBounds(0, 100, 242, 732);
+        panelMenu.setBackground(Color.white);
        
-        modulo= new JLabel("PLATILLOS", JLabel.CENTER);
         modulo.setFont(new Font("Inter", Font.PLAIN, 25));
         modulo.setForeground(Color.white);
         modulo.setBounds(0, 0, 242, 80);
@@ -187,31 +277,31 @@ public class Ventana extends JFrame {
         ImageIcon iconoeditar = new ImageIcon("Resources/editar.png");
         botoneditar.setIcon(iconoeditar);
 
-        panel.add(modulo);
-        panel.add(botonconsultar);
-        panel.add(botoncrear);
-        panel.add(botoneditar);
-        add(panel);
-        repaint();
+        panelMenu.add(modulo);
+        panelMenu.add(botonconsultar);
+        panelMenu.add(botoncrear);
+        panelMenu.add(botoneditar);
         
         panelPrincipal = new JPanel(null);
-        panelPrincipal.setBounds(100, 100, 1180, 732);
+        panelPrincipal.setBounds(242, 100, 1180, 732);
         panelPrincipal.setBackground(Color.decode("#EBEBEB"));
-
-        JPanel logo = new JPanel();
-		logo.setBounds(360, 100, 630, 630);
-		logo.setOpaque(false);
-		new Imagen("logo.png", logo);
+        
+        logoimg = new JPanel();
+		logoimg.setBounds(220, 60, 630, 630);
+		logoimg.setOpaque(false);
+		new Imagen("logo.png", logoimg);
 		
-		panelPrincipal.add(logo);
+		panelPrincipal.add(logoimg);
         add(panelPrincipal);
+        add(panelMenu);
+        actualizar();
     }
     
     public void actualizar(){
     	repaint();
     	revalidate();
-    	
     }
+
 }
 
 
