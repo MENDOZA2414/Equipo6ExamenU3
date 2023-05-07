@@ -12,15 +12,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Login {
-	private JTextField txtfUsuario ;
-	private JPasswordField txtfContraseña;
+	public JTextField txtfUsuario ;
+	public JPasswordField txtfContraseña;
 	private Font fuente = new Font("Inter", Font.PLAIN, 16);
 	private Color colorFuente = Color.decode("#666666");
 	private Color colorFondo = Color.white;
 	private Color colorBoton = Color.decode("#4B4F55");
 	
 	private JFrame frame;
-	private JButton iniciar;
+	public JButton iniciar;
 	private JPanel panel;
 	private JPanel fondo;
 

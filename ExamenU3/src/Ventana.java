@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import javax.swing.UIManager;
@@ -75,12 +76,31 @@ public class Ventana extends JFrame {
   	public void mostrarLogin() {
 
   		login = new Login(this);
-        login.getIniciarSesion().addActionListener(new ActionListener() {
+        login.getIniciarSesion();
+        login.iniciar.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                login.remover();
-                mostrarInicio();
+                login.txtfContraseña.getPassword();
+				char[] arrayC =  login.txtfContraseña.getPassword();
+				String pass = new String(arrayC);
+
+                if(login.txtfUsuario.getText().length() != 0 && pass.length() != 0){
+
+                    
+                    if( login.txtfUsuario.getText().equals("Admin") && pass.equals("12345")){
+                        login.remover();
+                        mostrarInicio();
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(null,"Usuario y/o contraseña incorrectos");
+                    } 
+                }
+                if(login.txtfUsuario.getText().isEmpty() || pass.isEmpty() ){
+                    JOptionPane.showMessageDialog(null,"Rellene todos los campos");
+
+                }	
+
             }
             
         });
