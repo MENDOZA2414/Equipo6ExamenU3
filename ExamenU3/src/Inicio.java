@@ -1,7 +1,9 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Point;
+import java.awt.event.ContainerEvent;
+import java.awt.event.ContainerListener;
+
 import javax.swing.*;
 
 public class Inicio {
@@ -10,7 +12,7 @@ public class Inicio {
     private Dimension tamaño = new Dimension(330, 320);
     private int x = 190;
     private int y= 180;
-    
+    private boolean removido = false;
     private Font fuente = new Font("Inter", Font.ITALIC, 25);
     private JButton platillosboton,ordenesBoton;
     
@@ -55,23 +57,41 @@ public class Inicio {
         titulo.setForeground(Color.decode("#26282B"));
         titulo.setFont(new Font("Inter", Font.PLAIN, 55));
         centro.add(titulo);
-
        
-        frame.getContentPane().add(centro);
-        
+        frame.getContentPane().add(centro);        
     }
     
     public void remover() {
     	frame.remove(centro);
         centro.repaint();
+      
     }
+    
+    public boolean removido() {
+    
+    	centro.addContainerListener((ContainerListener) new ContainerListener() {
+    	    @Override
+    	    public void componentAdded(ContainerEvent e) {
+    	        // Este método se llama cuando se agrega un componente al panel
+    	    }
 
-    public JButton getordenesBoton(){
+    	    @Override
+    	    public void componentRemoved(ContainerEvent e) {
+    	    	removido = true;
+    	    }
+    	});
+		return removido;
+    	
+    }
+    public JPanel getCentro() {
+		return centro;
+	}
+
+	public JButton getordenesBoton(){
         return ordenesBoton;
     }
 
     public JButton getplatillosboton(){
         return platillosboton;
     }
-
 }

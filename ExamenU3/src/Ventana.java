@@ -1,7 +1,6 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Menu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Timer;
@@ -10,12 +9,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
-import javax.swing.UIManager;
-import java.awt.FlowLayout;
-
 
 public class Ventana extends JFrame {
     Login login; 
@@ -23,10 +18,10 @@ public class Ventana extends JFrame {
     JButton logo;
     JPanel logoimg;
     private int contador = 0;
-    private JPanel panelPrincipal;
+    private JPanel panelPrincipal = new JPanel();
     private JLabel modulo = new JLabel("", JLabel.CENTER);
-    private JPanel panelMenu;
-    private JPanel panelbarra = new JPanel();
+    private JPanel panelMenu = new JPanel();;
+    private JPanel panelBarra = new JPanel();
     private int y = 732;
     
     
@@ -58,7 +53,6 @@ public class Ventana extends JFrame {
   			public void run() {
   				contador++;
   				if(contador == 1) {
-  					
   					mostrarLogin();
   					panelCarga.setVisible(false);
                     repaint();
@@ -76,19 +70,20 @@ public class Ventana extends JFrame {
   	public void mostrarLogin() {
 
   		login = new Login(this);
+  		login.agregar();
         login.getIniciarSesion();
         login.iniciar.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                login.txtfContraseña.getPassword();
+                /*login.txtfContraseña.getPassword();
 				char[] arrayC =  login.txtfContraseña.getPassword();
 				String pass = new String(arrayC);
 
                 if(login.txtfUsuario.getText().length() != 0 && pass.length() != 0){
 
                     
-                    if( login.txtfUsuario.getText().equals("Admin") && pass.equals("12345")){
+                    if(login.txtfUsuario.getText().equals("Admin") && pass.equals("12345")){
                         login.remover();
                         mostrarInicio();
                     }
@@ -99,22 +94,26 @@ public class Ventana extends JFrame {
                 if(login.txtfUsuario.getText().isEmpty() || pass.isEmpty() ){
                     JOptionPane.showMessageDialog(null,"Rellene todos los campos");
 
-                }	
-
+                }	*/
+            	login.remover();
+                mostrarInicio();
+                repaint();
             }
             
         });
 	}
   	
   	public void mostrarInicio() {
-  		agregarBarra();
   		inicio = new Inicio(this);
+  		agregarBarra();
+  	
+         
+  		 
         inicio.getplatillosboton().addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                
-                logo.setEnabled(true);
+
                 inicio.remover();
                 modulo.setText("PLATILLOS");
                 agregarMenu();
@@ -129,54 +128,58 @@ public class Ventana extends JFrame {
             @Override
             public void actionPerformed(ActionEvent arg0) {
 
-                logo.setEnabled(true);
                 inicio.remover();
                 modulo.setText("ORDENES");
                 agregarMenu();
-                agregarBarra();
-        
+                agregarBarra();     
             }
-            
         });
-
+        if(!inicio.removido()) {
+			logo.setVisible(false);
+		}
+		else {
+			logo.setVisible(true);
+		}
         repaint();
   	}
     
     public void agregarBarra() {
 
-        panelbarra.setLayout(null);
-        panelbarra.setBounds(0, 0, 1280, 100);
-        panelbarra.setBackground(Color.decode("#26282B"));
+    	panelBarra.setLayout(null);
+        panelBarra.setBounds(0, 0, 1280, 100);
+        panelBarra.setBackground(Color.decode("#26282B"));
         
-	    JLabel mensaje = new JLabel("BIENVENIDO ADMIN", JLabel.LEFT);
+	    JLabel mensaje = new JLabel("Bienvenido a Burguer Daily fresh ADMIN", JLabel.LEFT);
 	    mensaje.setFont(new Font("Inter", Font.PLAIN, 18));
-	    mensaje.setBounds(110, 35, 550, 50);
+	    mensaje.setBounds(20, 35, 550, 50);
 	    mensaje.setForeground(Color.white);
 	    mensaje.setOpaque(false);
         
-		logo = new JButton(null, new ImageIcon("Resources/iconoInicio.png"));
-		logo.setBounds(10,10, 80, 80);
-		logo.setOpaque(true);
-		logo.setContentAreaFilled(false); 
-		logo.setBorderPainted(false);
-		logo.setFocusPainted(false);
-        logo.setEnabled(false);
-        logo.addActionListener(new ActionListener() {
+	
+	    	logo = new JButton(null, new ImageIcon("Resources/iconoInicio.png"));
+			logo.setBounds(10,10, 80, 80);
+			logo.setContentAreaFilled(false); 
+			logo.setBorderPainted(false);
+			logo.setFocusPainted(false);
+			panelBarra.add(logo);
+			
+			
+				logo.addActionListener(new ActionListener() {
 
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
+		            @Override
+		            public void actionPerformed(ActionEvent arg0) {
 
-                remove(panelMenu);
-                remove(panelPrincipal);
-                mostrarInicio();
-                repaint();
+		                remove(panelMenu);
+		                remove(panelPrincipal);
+		            	logo.setVisible(false);
+		                mostrarInicio();
+		                repaint();
 
-            }
-            
-        });
-        
-		panelbarra.add(logo);
-		
+		            }
+		            
+		        });
+				
+
 		JButton exit = new JButton(null, new ImageIcon("Resources/exit.png"));
 		exit.setBounds(1200, 10, 60, 60);
 		exit.setOpaque(true);
@@ -188,16 +191,21 @@ public class Ventana extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                /*remove(panelPrincipal);
-                remove(panelMenu);
-                remove(panelbarra);
-                mostrarLogin();
-                repaint();*/
-
                 
-                remove(panelPrincipal);
-                remove(panelMenu);
-                remove(panelbarra);
+            	if(panelBarra.getComponentCount() != 0) {
+            		remove(panelBarra);
+            	}
+            	if(panelMenu.getComponentCount() != 0) {
+            		remove(panelMenu);
+            	}
+            	if(panelPrincipal.getComponentCount() != 0) {
+            		remove(panelPrincipal);
+            	}
+            	if(panelPrincipal.getComponentCount() != 0) {
+            		remove(panelPrincipal);
+            	}
+            	inicio.remover();
+                mostrarLogin();
                 
                 repaint();
             }
@@ -211,17 +219,17 @@ public class Ventana extends JFrame {
 	    Salir.setForeground(Color.white);
 	    Salir.setOpaque(false);
 		
-		panelbarra.add(exit);
-        panelbarra.add(mensaje);
-        panelbarra.add(Salir);
-        add(panelbarra);
+	    panelBarra.add(exit);
+	    panelBarra.add(mensaje);
+	    panelBarra.add(Salir);
+        add(panelBarra);
         repaint();
         
     }
     int i;
     public void agregarMenu() {
 
-    	panelMenu = new JPanel();
+    	//panelMenu = new JPanel();
     	panelMenu.setLayout(null);
         panelMenu.setBounds(0, 100, 242, 732);
         panelMenu.setBackground(Color.white);
@@ -232,7 +240,7 @@ public class Ventana extends JFrame {
         modulo.setBackground(Color.decode("#9F9F9F"));
         modulo.setOpaque(true);
         
-        panelPrincipal = new JPanel(null);
+        //panelPrincipal = new JPanel(null);
         panelPrincipal.setBounds(242, 100, 1180, 732);	
 
         JPanel panel = new JPanel();
@@ -351,7 +359,6 @@ public class Ventana extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Editar");
 			}
-        	
         });
         
         ImageIcon iconoeditar = new ImageIcon("Resources/editar.png");
@@ -361,8 +368,6 @@ public class Ventana extends JFrame {
         panelMenu.add(botonconsultar);
         panelMenu.add(botoncrear);
         panelMenu.add(botoneditar);
-        
-        
         
         logoimg = new JPanel();
 		logoimg.setBounds(220, 60, 630, 630);

@@ -10,6 +10,8 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 public class Login {
 	public JTextField txtfUsuario ;
@@ -76,10 +78,50 @@ public class Login {
 		
 		panel.add(logo);
 		panel.add(circulo);
+		
+		fondo.add(panel);
 		frame.add(panel);
 		frame.add(fondo);
+		
+		//Metodo para quitar el texto dentro del textfield de usuario y contraseña
+		listenerTxtf();
 	}
+	
+	public void listenerTxtf() {
+		txtfUsuario.addFocusListener(new FocusListener() {
 
+			@Override
+			public void focusGained(FocusEvent e) {
+				if(txtfUsuario.getText().equals("Usuario")){
+					txtfUsuario.setText(null);
+				}
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				if(txtfUsuario.getText().equals("")) {
+					txtfUsuario.setText("Usuario");					
+				}
+			}
+		});
+		
+		txtfContraseña.addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				if(new String(txtfContraseña.getPassword()).equals("********")){
+					txtfContraseña.setText(null);
+				}
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				if(new String(txtfContraseña.getPassword()).equals("")) {
+					txtfContraseña.setText("********");					
+				}
+			}
+		});	
+	}
 	public JButton getIniciarSesion() {
 		return iniciar;
 	}
@@ -89,6 +131,11 @@ public class Login {
 		frame.remove(fondo);
     }
 	
-
+	public void agregar() {
+		frame.add(panel);
+		frame.add(fondo);
+		frame.repaint();
+		frame.revalidate();
+	}
 }
 
