@@ -3,12 +3,15 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 
@@ -75,30 +78,44 @@ public class Ventana extends JFrame {
         login.iniciar.addActionListener(new ActionListener() {
 
             @Override
-            public void actionPerformed(ActionEvent arg0) {
-                /*login.txtfContraseña.getPassword();
-				char[] arrayC =  login.txtfContraseña.getPassword();
-				String pass = new String(arrayC);
+			public void actionPerformed(ActionEvent e) {
 
-                if(login.txtfUsuario.getText().length() != 0 && pass.length() != 0){
+                String Username = login.txtfUsuario.getText();
+                String password = String.valueOf(login.txtfContraseña.getPassword());
+                String[] data;
 
-                    
-                    if(login.txtfUsuario.getText().equals("Admin") && pass.equals("12345")){
-                        login.remover();
-                        mostrarInicio();
+                try{
+
+                    BufferedReader BR = new BufferedReader(new FileReader("src\\users.txt"));
+                    String renglon;
+                    boolean validacion = false;
+
+                    while((renglon = BR.readLine()) != null ){
+
+                        data = renglon.split(",");
+
+                        if (data[0].equals(Username) && data[1].equals(password)) {
+                        	
+                            Username = data[0];
+                            password = data[1];
+
+                            JOptionPane.showMessageDialog(null, "Bienvenido "+ Username,"INGRESO EXITOSO", JOptionPane.INFORMATION_MESSAGE);
+                            login.remover();
+                            mostrarInicio();
+                            repaint();
+                            
+                            validacion = true;
+
+                        }
                     }
-                    else{
-                        JOptionPane.showMessageDialog(null,"Usuario y/o contraseña incorrectos");
-                    } 
+                    if (validacion == false){
+                        JOptionPane.showMessageDialog(null, "El usuario y contraseña no coindicen","Error!", JOptionPane.ERROR_MESSAGE);
+                    }
+                    
+                }catch(Exception f){
+                	System.err.println("No se encontro archivo");
                 }
-                if(login.txtfUsuario.getText().isEmpty() || pass.isEmpty() ){
-                    JOptionPane.showMessageDialog(null,"Rellene todos los campos");
-
-                }	*/
-            	login.remover();
-                mostrarInicio();
-                repaint();
-            }
+			}
             
         });
 	}
