@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Menu;
 import java.awt.event.ActionEvent;
@@ -7,10 +8,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import javax.swing.UIManager;
+import java.awt.FlowLayout;
 
 
 public class Ventana extends JFrame {
@@ -209,11 +212,20 @@ public class Ventana extends JFrame {
         modulo.setOpaque(true);
         
         panelPrincipal = new JPanel(null);
-        panelPrincipal.setBounds(242, 100, 1180, 732);
+        panelPrincipal.setBounds(242, 100, 1180, 732);	
+        panelPrincipal.setPreferredSize(new Dimension(800,500));
+        
+        JScrollPane scrollPane = new JScrollPane(panelPrincipal);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setBounds(242, 100, 1180, 732);	
+        panelPrincipal.add(scrollPane);
+        add(panelPrincipal);
+
         panelPrincipal.setBackground(Color.decode("#EBEBEB"));
         
         ConsultarPlatillos platillos = new ConsultarPlatillos(panelPrincipal);
-        panelPrincipal.repaint();
+        panelPrincipal.repaint();	
+
         
         //Boton consultar//
         JButton botonconsultar = new JButton("   Consultar");
@@ -297,8 +309,7 @@ public class Ventana extends JFrame {
 		logoimg.setOpaque(false);
 		new Imagen("logo.png", logoimg);
 		
-		panelPrincipal.add(logoimg);
-        add(panelPrincipal);
+		//panelPrincipal.add(logoimg); LOGO DE FONDO
         add(panelMenu);
         actualizar();
     }
