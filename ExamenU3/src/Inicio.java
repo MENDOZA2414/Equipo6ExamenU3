@@ -67,22 +67,6 @@ public class Inicio {
       
     }
     
-    public boolean removido() {
-    
-    	centro.addContainerListener((ContainerListener) new ContainerListener() {
-    	    @Override
-    	    public void componentAdded(ContainerEvent e) {
-    	        // Este método se llama cuando se agrega un componente al panel
-    	    }
-
-    	    @Override
-    	    public void componentRemoved(ContainerEvent e) {
-    	    	removido = true;
-    	    }
-    	});
-		return removido;
-    	
-    }
     public JPanel getCentro() {
 		return centro;
 	}

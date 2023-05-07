@@ -21,10 +21,13 @@ public class Ventana extends JFrame {
     JButton logo;
     JPanel logoimg;
     private int contador = 0;
-    private JPanel panelPrincipal = new JPanel();
+    private JPanel panelPrincipal;
     private JLabel modulo = new JLabel("", JLabel.CENTER);
-    private JPanel panelMenu = new JPanel();;
+    private JPanel panelMenu = new JPanel();
     private JPanel panelBarra = new JPanel();
+    JLabel mensaje ;
+	JButton exit;
+	JLabel salir;
     private int y = 732;
     
     
@@ -86,7 +89,7 @@ public class Ventana extends JFrame {
 
                 try{
 
-                    BufferedReader BR = new BufferedReader(new FileReader("src\\users.txt"));
+                    BufferedReader BR = new BufferedReader(new FileReader("src/users.txt"));
                     String renglon;
                     boolean validacion = false;
 
@@ -123,19 +126,22 @@ public class Ventana extends JFrame {
   	public void mostrarInicio() {
   		inicio = new Inicio(this);
   		agregarBarra();
-  	
-         
-  		 
+  		logo.setVisible(false);
+        exit.setVisible(true);
+        salir.setVisible(true);
+        mensaje.setVisible(true);
         inicio.getplatillosboton().addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent arg0) {
-
                 inicio.remover();
                 modulo.setText("PLATILLOS");
                 agregarMenu();
-                agregarBarra();
-                
+                logo.setVisible(true);
+                exit.setVisible(false);
+                salir.setVisible(false);
+            	mensaje.setVisible(false);
+            	panelBarra.repaint();
             }
             
         });
@@ -144,19 +150,18 @@ public class Ventana extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent arg0) {
-
                 inicio.remover();
                 modulo.setText("ORDENES");
                 agregarMenu();
-                agregarBarra();     
+                logo.setVisible(true);
+                exit.setVisible(false);
+                salir.setVisible(false);
+                mensaje.setVisible(false);
+            	remove(mensaje);
+            	panelBarra.repaint();
             }
         });
-        if(!inicio.removido()) {
-			logo.setVisible(false);
-		}
-		else {
-			logo.setVisible(true);
-		}
+
         repaint();
   	}
     
@@ -166,7 +171,7 @@ public class Ventana extends JFrame {
         panelBarra.setBounds(0, 0, 1280, 100);
         panelBarra.setBackground(Color.decode("#26282B"));
         
-	    JLabel mensaje = new JLabel("Bienvenido a Burguer Daily fresh ADMIN", JLabel.LEFT);
+        mensaje = new JLabel("Bienvenido a Burguer Daily fresh " + login.txtfUsuario.getText(), JLabel.LEFT);
 	    mensaje.setFont(new Font("Inter", Font.PLAIN, 18));
 	    mensaje.setBounds(20, 35, 550, 50);
 	    mensaje.setForeground(Color.white);
@@ -178,7 +183,7 @@ public class Ventana extends JFrame {
 			logo.setContentAreaFilled(false); 
 			logo.setBorderPainted(false);
 			logo.setFocusPainted(false);
-			panelBarra.add(logo);
+		
 			
 			
 				logo.addActionListener(new ActionListener() {
@@ -196,8 +201,8 @@ public class Ventana extends JFrame {
 		            
 		        });
 				
-
-		JButton exit = new JButton(null, new ImageIcon("Resources/exit.png"));
+				
+		exit = new JButton(null, new ImageIcon("Resources/exit.png"));
 		exit.setBounds(1200, 10, 60, 60);
 		exit.setOpaque(true);
 		exit.setContentAreaFilled(false); 
@@ -208,44 +213,40 @@ public class Ventana extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                
-            	if(panelBarra.getComponentCount() != 0) {
-            		remove(panelBarra);
-            	}
+           
+            	remove(panelBarra);
+            	
             	if(panelMenu.getComponentCount() != 0) {
             		remove(panelMenu);
             	}
-            	if(panelPrincipal.getComponentCount() != 0) {
-            		remove(panelPrincipal);
-            	}
-            	if(panelPrincipal.getComponentCount() != 0) {
-            		remove(panelPrincipal);
-            	}
+                exit.setVisible(false);
+                salir.setVisible(false);
+                mensaje.setVisible(false);
             	inicio.remover();
                 mostrarLogin();
-                
                 repaint();
             }
             
         });
 
         
-        JLabel Salir = new JLabel("Salir", JLabel.LEFT);
-	    Salir.setFont(new Font("Inter", Font.PLAIN, 18));
-	    Salir.setBounds(1208, 55, 550, 50);
-	    Salir.setForeground(Color.white);
-	    Salir.setOpaque(false);
-		
+        salir = new JLabel("Salir", JLabel.LEFT);
+        salir.setFont(new Font("Inter", Font.PLAIN, 18));
+        salir.setBounds(1208, 55, 550, 50);
+        salir.setForeground(Color.white);
+        salir.setOpaque(false);
+
+        panelBarra.add(logo);
 	    panelBarra.add(exit);
 	    panelBarra.add(mensaje);
-	    panelBarra.add(Salir);
+	    panelBarra.add(salir);
         add(panelBarra);
         repaint();
-        
+		
     }
-    int i;
+    
     public void agregarMenu() {
-
+    	
     	//panelMenu = new JPanel();
     	panelMenu.setLayout(null);
         panelMenu.setBounds(0, 100, 242, 732);
@@ -257,7 +258,7 @@ public class Ventana extends JFrame {
         modulo.setBackground(Color.decode("#9F9F9F"));
         modulo.setOpaque(true);
         
-        //panelPrincipal = new JPanel(null);
+        panelPrincipal = new JPanel(null);
         panelPrincipal.setBounds(242, 100, 1180, 732);	
 
         JPanel panel = new JPanel();
@@ -314,7 +315,7 @@ public class Ventana extends JFrame {
         botoncrear.setBorderPainted(false);
         botoncrear.setFocusPainted(false);
       
-        for(i = 0; i < platillos.getBotones().size(); i++) {
+        for(int i = 0; i < platillos.getBotones().size(); i++) {
         	platillos.getBotones().get(i).addActionListener(new ActionListener() {
 
 				@Override
