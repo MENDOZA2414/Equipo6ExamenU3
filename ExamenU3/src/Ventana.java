@@ -208,6 +208,13 @@ public class Ventana extends JFrame {
         modulo.setBackground(Color.decode("#9F9F9F"));
         modulo.setOpaque(true);
         
+        panelPrincipal = new JPanel(null);
+        panelPrincipal.setBounds(242, 100, 1180, 732);
+        panelPrincipal.setBackground(Color.decode("#EBEBEB"));
+        
+        ConsultarPlatillos platillos = new ConsultarPlatillos(panelPrincipal);
+        panelPrincipal.repaint();
+        
         //Boton consultar//
         JButton botonconsultar = new JButton("   Consultar");
         
@@ -247,6 +254,7 @@ public class Ventana extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Crear");
+				platillos.agregarPlatillo();
 			}
         	
         });
@@ -282,9 +290,7 @@ public class Ventana extends JFrame {
         panelMenu.add(botoncrear);
         panelMenu.add(botoneditar);
         
-        panelPrincipal = new JPanel(null);
-        panelPrincipal.setBounds(242, 100, 1180, 732);
-        panelPrincipal.setBackground(Color.decode("#EBEBEB"));
+        
         
         logoimg = new JPanel();
 		logoimg.setBounds(220, 60, 630, 630);
