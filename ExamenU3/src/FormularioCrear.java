@@ -1,16 +1,29 @@
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class FormularioCrear extends JFrame{
     
+	private static final int NUM_IMAGENES = 1;
+	JPanel pantalla;
+	
     public FormularioCrear(){
 
         setBounds(0, 0, 1280, 832);
@@ -18,7 +31,7 @@ public class FormularioCrear extends JFrame{
         setLayout(null);
         setBackground(Color.decode("#EBEBEB"));
 
-        JPanel pantalla = new JPanel();
+        pantalla = new JPanel();
         pantalla.setSize(300, 400);
         pantalla.setBackground(Color.decode("#DBDBDB"));
         pantalla.setLocation(470,170);
@@ -57,6 +70,44 @@ public class FormularioCrear extends JFrame{
         JButton agFoto = new JButton("Agregar foto");
         agFoto.setBounds(57, 310, 185, 30);
         pantalla.add(agFoto);
+        
+        agFoto.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				 // Abrir un cuadro de dialogo para seleccionar las imagenes
+	            JFileChooser fileChooser = new JFileChooser();
+	            fileChooser.setMultiSelectionEnabled(true);
+	            fileChooser.showOpenDialog(pantalla);
+	            File[] selectedFiles = fileChooser.getSelectedFiles();
+
+	            if (selectedFiles.length != NUM_IMAGENES) {
+	                JOptionPane.showMessageDialog(pantalla, "Debe seleccionar " + NUM_IMAGENES + " imagenes.");
+	                return;
+	            }
+
+	            try {
+	                for (int i = 0; i < selectedFiles.length; i++) {
+	                    // Cargar la imagen seleccionada
+	                    BufferedImage image = ImageIO.read(selectedFiles[i]);
+
+	                    // Guardar la imagen en disco
+	                    File outputfile = new File("C:\\Users\\USER\\Pictures\\Nueva carpeta" + i + ".png");
+	                    ImageIO.write(image, "png", outputfile);
+
+	                    // Mostrar la imagen en la interfaz de usuario
+	                    ImageIcon icon = new ImageIcon(image);
+	                    JLabel label = new JLabel(icon);
+	                    pantalla.add(label);
+	                }
+
+	                JOptionPane.showMessageDialog(pantalla, "La imagenen se han guardado exitosamente en disco y se han mostrado en la interfaz de usuario.");
+	            } catch (IOException ex) {
+	                ex.printStackTrace();
+	            }
+			}
+        	
+        });
 
         JButton aceptar = new JButton("A C E P T A R");
         aceptar.setBounds(30, 360, 110, 30);
