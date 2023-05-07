@@ -26,6 +26,7 @@ public class Ventana extends JFrame {
     private JLabel modulo = new JLabel("", JLabel.CENTER);
     private JPanel panelMenu;
     private JPanel panelbarra = new JPanel();
+    private int y = 732;
     
     
     public Ventana() {
@@ -197,7 +198,7 @@ public class Ventana extends JFrame {
         repaint();
         
     }
-    
+    int i;
     public void agregarMenu() {
 
     	panelMenu = new JPanel();
@@ -213,21 +214,28 @@ public class Ventana extends JFrame {
         
         panelPrincipal = new JPanel(null);
         panelPrincipal.setBounds(242, 100, 1180, 732);	
-        panelPrincipal.setPreferredSize(new Dimension(800,500));
-        
-        JScrollPane scrollPane = new JScrollPane(panelPrincipal);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(null);
+        panel.setPreferredSize(new Dimension(1180, y));
+
+        JScrollPane scrollPane = new JScrollPane(panel);
+        scrollPane.setBounds(0, 0, 1000, 732);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setBounds(242, 100, 1180, 732);	
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+       
+        ConsultarPlatillos platillos = new ConsultarPlatillos(panel);
+        scrollPane.revalidate();
+        scrollPane.setViewportView(panel);
+
         panelPrincipal.add(scrollPane);
-        add(panelPrincipal);
 
         panelPrincipal.setBackground(Color.decode("#EBEBEB"));
         
-        ConsultarPlatillos platillos = new ConsultarPlatillos(panelPrincipal);
         panelPrincipal.repaint();	
 
-        
-        //Boton consultar//
+        //Boton consultar
         JButton botonconsultar = new JButton("   Consultar");
         
         botonconsultar.setBounds(0, 100, 200, 50);
@@ -261,12 +269,44 @@ public class Ventana extends JFrame {
         botoncrear.setBorderPainted(false);
         botoncrear.setFocusPainted(false);
       
+        for(i = 0; i < platillos.getBotones().size(); i++) {
+        	platillos.getBotones().get(i).addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					platillos.eliminarPlatillo((JButton)e.getSource());
+					if(platillos.isMasMenosScroll()) {
+						panel.setPreferredSize(new Dimension(1180, y-=250));
+					}
+					scrollPane.revalidate();
+				}
+        		
+        	});
+		}
+		
+        
         botoncrear.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Crear");
 				platillos.agregarPlatillo();
+				platillos.getPlatilloNuevo().addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						platillos.eliminarPlatillo((JButton)e.getSource());
+						if(platillos.isMasMenosScroll()) {
+							panel.setPreferredSize(new Dimension(1180, y-=250));
+						}
+						scrollPane.revalidate();
+					}
+					
+				});
+				if(platillos.isMasMenosScroll()) {
+					panel.setPreferredSize(new Dimension(1180, y+=250));
+				}
+				scrollPane.revalidate();
 			}
         	
         });
@@ -310,6 +350,7 @@ public class Ventana extends JFrame {
 		new Imagen("logo.png", logoimg);
 		
 		//panelPrincipal.add(logoimg); LOGO DE FONDO
+		add(panelPrincipal);
         add(panelMenu);
         actualizar();
     }
