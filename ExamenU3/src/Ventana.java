@@ -28,7 +28,7 @@ public class Ventana extends JFrame {
     JButton logo;
     JPanel logoimg;
     ConsultarOrden consultarOrden;
-    FormularioCrear crearPlatillo;
+    FormularioCrear formularioCrear;
     ConsultarPlatillos platillos;
     private int contador = 0;
     private JPanel panelPrincipal;
@@ -40,6 +40,7 @@ public class Ventana extends JFrame {
 	JLabel salir;
     private int y = 732;
     JPanel crearNuevoPlatillo;
+    int aux;
     
     public Ventana() {
 
@@ -176,7 +177,7 @@ public class Ventana extends JFrame {
         });
         consultarOrden = new ConsultarOrden(frame);
         crearNuevoPlatillo = new JPanel();
-        crearPlatillo = new FormularioCrear(crearNuevoPlatillo);
+        formularioCrear = new FormularioCrear(crearNuevoPlatillo);
         repaint();
   	}
     
@@ -288,9 +289,7 @@ public class Ventana extends JFrame {
         JScrollBar verticalScrollBar = scrollPane.getVerticalScrollBar();
         verticalScrollBar.setUnitIncrement(20);
         
-        if (panel.getParent() != null) {
-        	  platillos = new ConsultarPlatillos(panel);
-		}
+        
         scrollPane.revalidate();
         scrollPane.setViewportView(panel);
 
@@ -314,7 +313,10 @@ public class Ventana extends JFrame {
 
 				if(modulo.getText().equals("PLATILLOS")){
 					if (crearNuevoPlatillo.getParent() != null) {
-						crearPlatillo.remover();
+						formularioCrear.remover();
+					}
+					if (panel.getParent() != null) {
+			        	  platillos = new ConsultarPlatillos(panel);
 					}
                     panelPrincipal.add(scrollPane);
                     panelPrincipal.revalidate();
@@ -396,19 +398,68 @@ public class Ventana extends JFrame {
         botoncrear.addActionListener(new ActionListener() {
 
 			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 				if(modulo.getText().equals("PLATILLOS")){
-					System.out.println("Crear");
 					removerPlatillos(scrollPane);
-					crearPlatillo.agregarPanel(panelPrincipal);
-                    crearPlatillo.getPanel().repaint();
-                    crearPlatillo.getPanel().revalidate();
-					panelPrincipal.repaint();
+					formularioCrear.agregarPanel(panelPrincipal);
+					formularioCrear.getPanel().repaint();
+					formularioCrear.getPanel().revalidate();
+					aux++;
+					formularioCrear.getAceptar().addActionListener(new ActionListener() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							
+							if(aux == 1 || formularioCrear.isCrear()) {
+								platillos.agregarPlatillo();
+								System.out.println("Crear");
+								
+								panelPrincipal.repaint();
+								
+								platillos.getPlatilloNuevo().addActionListener(new ActionListener() {
+
+									@Override
+									public void actionPerformed(ActionEvent e) {
+										scrollPane.revalidate();
+
+										JWindow window = new JWindow();
+				                        window.add(new JLabel("Contenido de la ventana emergente"));
+				                        window.setSize(300,300);
+				                        window.setBackground(Color.WHITE);
+
+				                        window.setLocationRelativeTo((JButton)e.getSource());
+				                        window.setVisible(true);
+				                        window.addMouseListener(new MouseAdapter() {
+				                            public void mouseEntered(MouseEvent e) {
+				                                window.setVisible(true);
+				                                panelPrincipal.repaint();
+				                            }
+
+				                            public void mouseExited(MouseEvent e) {
+				                                window.setVisible(false);
+				                                panelPrincipal.repaint();
+				                            }
+				                        });
+				                     }
+
+								});
+								if(platillos.isMasMenosScroll()) {
+									panel.setPreferredSize(new Dimension(1180, y+=250));
+								}
+								
+								scrollPane.revalidate();
+							}
+							aux = 0;
+						}
+						
+					});
+					
+					
 				}
-				else if(modulo.getText().equals("ORDENES")){
-					 
+				else if(modulo.getText().equals("ORDENES")){	 
 				}
-			 }
+			}
         });
 			
         
@@ -433,7 +484,7 @@ public class Ventana extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(modulo.getText().equals("PLATILLOS")){
 					if (crearNuevoPlatillo.getParent() != null) {
-						crearPlatillo.remover();
+						formularioCrear.remover();
 					}
 					System.out.println("Editar Platillo");
 					removerPlatillos(scrollPane);

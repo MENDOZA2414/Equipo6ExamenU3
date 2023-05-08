@@ -37,8 +37,10 @@ public class FormularioCrear{
     JTextArea descripcion;
     JScrollPane scrollPane;
     String nombreImagen;
-
-    public FormularioCrear(JPanel panel){
+    JButton aceptar;
+    boolean crear;
+    
+	public FormularioCrear(JPanel panel){
 
         this.panel = panel;
         panel.setLayout(null);
@@ -146,7 +148,7 @@ public class FormularioCrear{
         	
         });
 
-        JButton aceptar = new JButton("A C E P T A R");
+        aceptar = new JButton("A C E P T A R");
         aceptar.setBounds(107, 360, 135, 30);
         aceptar.setOpaque(true);
         aceptar.setBackground(Color.green);
@@ -181,9 +183,8 @@ public class FormularioCrear{
 
 									JOptionPane.showMessageDialog(null, "Platillo ya existente.","ERROR!", JOptionPane.ERROR_MESSAGE);
 									encontrado = true;
-
+									crear = false;
 								}
-								
 							}
 						} catch (HeadlessException | IOException e1) {
 							e1.printStackTrace();
@@ -191,7 +192,7 @@ public class FormularioCrear{
 						
 						if(!encontrado){
 							try {
-
+								
 								JOptionPane.showMessageDialog(null, "Platillo creado","Listo!", JOptionPane.INFORMATION_MESSAGE);
 		                        archivo = new FileWriter("src/platillos.txt",true);
 		                        editor = new PrintWriter(archivo);
@@ -203,9 +204,10 @@ public class FormularioCrear{
 		        				//Emaildata.setText(null);
 		        				precio.setText(null);
 		        				nombreImagen = null;		                        
-
+		        				
 		                    } 
 		                    catch (Exception e1) {
+		                    	crear = true;
 		                        //System.err.println("Datos NO guardados");
 		                    } finally{
 		                        try {
@@ -215,10 +217,11 @@ public class FormularioCrear{
 		                        }
 		                    }
 						}
-
+					
 				}
 				else{
 					JOptionPane.showMessageDialog(null, "Llene todos los campos.",null,JOptionPane.ERROR_MESSAGE);
+					crear = false;
                 }
 			}
         	
@@ -234,7 +237,11 @@ public class FormularioCrear{
         
         panel.repaint();
     }
-    
+	
+	public JButton getAceptar() {
+		return aceptar;
+	}
+
     public void agregarPanel(JPanel panelPrincipal) {
     	this.panelPrincipal = panelPrincipal;
     	panelPrincipal.add(panel);
@@ -250,4 +257,9 @@ public class FormularioCrear{
     public JPanel getPanel(){
         return panel;
     }
+
+	public boolean isCrear() {
+		return crear;
+	}
+    
 }

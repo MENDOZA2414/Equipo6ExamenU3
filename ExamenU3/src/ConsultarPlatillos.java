@@ -127,5 +127,4 @@ public class ConsultarPlatillos {
 	public ArrayList<JButton> getBotones() {
 		return botones;
 	}
-	
 }

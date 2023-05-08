@@ -1,2 +1,1 @@
 Monster,hamburguesa doble,Alimentos,120,monster.png,
-pepe, Agrega descripcion del platillo,Bebidas,50,Food-Truck-Logo-Template-Graphics-3472280-1.png,

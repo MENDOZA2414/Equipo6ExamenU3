@@ -127,4 +127,6 @@ public class FormularioEditar {
 
         panel.repaint();
     }
+	
+	
 }
