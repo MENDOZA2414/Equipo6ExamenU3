@@ -1,11 +1,16 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -18,6 +23,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 
 public class FormularioCrear{
     
@@ -27,6 +36,7 @@ public class FormularioCrear{
 	JPanel panelPrincipal;
     JTextArea descripcion;
     JScrollPane scrollPane;
+    String nombreImagen;
 
     public FormularioCrear(JPanel panel){
 
@@ -65,7 +75,29 @@ public class FormularioCrear{
         categoria.addItem("Postres");
         panel.add(categoria);
 
-        JTextField precio = new JTextField("$");
+        JTextField precio = new JTextField("");
+        AbstractDocument doc = (AbstractDocument) precio.getDocument();
+
+        doc.setDocumentFilter(new DocumentFilter() {
+            
+            @Override
+            public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr)
+                    throws BadLocationException {
+                if (string.matches("[0-9]+")) {
+                    super.insertString(fb, offset, string, attr);
+                }
+            }
+        
+            @Override
+            public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs)
+                    throws BadLocationException {
+                if (text.matches("[0-9]+")) {
+                    super.replace(fb, offset, length, text, attrs);
+                }
+            }
+
+        });
+
         precio.setBounds(107, 260, 285, 30);
         precio.setForeground(Color.decode("#737373"));
         panel.add(precio);
@@ -93,10 +125,12 @@ public class FormularioCrear{
 	                for (int i = 0; i < selectedFiles.length; i++) {
 	                    // Cargar la imagen seleccionada
 	                    BufferedImage image = ImageIO.read(selectedFiles[i]);
+                        nombreImagen = selectedFiles[i].getName();
 
 	                    // Guardar la imagen en disco
-	                    File outputfile = new File("C:\\Users\\USER\\Pictures\\Nueva carpeta" + i + ".png");
+	                    File outputfile = new File("Resources/" + i + ".png");
 	                    ImageIO.write(image, "png", outputfile);
+
 
 	                    // Mostrar la imagen en la interfaz de usuario
 	                    ImageIcon icon = new ImageIcon(image);
@@ -116,6 +150,80 @@ public class FormularioCrear{
         aceptar.setBounds(107, 360, 135, 30);
         aceptar.setOpaque(true);
         aceptar.setBackground(Color.green);
+
+        aceptar.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				
+				String nombrePlatillo = nombre.getText();   //Label.gettext
+				String descripcion = ((JTextArea)scrollPane.getViewport().getView()).getText();   //Label.gettext
+				String category = (String) categoria.getSelectedItem(); //combobox.getSelectedItem
+				String preci0 = precio.getText();
+				String rutaImagen = nombreImagen;
+                System.out.println(rutaImagen);
+				
+				FileWriter archivo = null;
+                PrintWriter editor = null;
+                String[] data;
+				boolean encontrado = false;
+				
+				if(!nombrePlatillo.isEmpty()&&!descripcion.isEmpty()&&!category.isEmpty()&&!preci0.isEmpty()&&!rutaImagen.isEmpty()) {
+					
+					String renglon;
+
+						try (BufferedReader BR = new BufferedReader(new FileReader("src/platillos.txt"))){
+							
+							while((renglon = BR.readLine()) != null ){
+
+								data = renglon.split(",");
+
+								if (data[0].equals(nombrePlatillo)){
+
+									JOptionPane.showMessageDialog(null, "Platillo ya existente.","ERROR!", JOptionPane.ERROR_MESSAGE);
+									encontrado = true;
+
+								}
+								
+							}
+						} catch (HeadlessException | IOException e1) {
+							e1.printStackTrace();
+						}
+						
+						if(!encontrado){
+							try {
+
+								JOptionPane.showMessageDialog(null, "Platillo creado","Listo!", JOptionPane.INFORMATION_MESSAGE);
+		                        archivo = new FileWriter("src/platillos.txt",true);
+		                        editor = new PrintWriter(archivo);
+
+		                        editor.print(nombrePlatillo + "," + descripcion + "," + category + "," + preci0 + "," + rutaImagen + "," + "\n");
+		                        
+		                        nombre.setText(null);
+		                        ((JTextArea)scrollPane.getViewport().getView()).setText(null);
+		        				//Emaildata.setText(null);
+		        				precio.setText(null);
+		        				nombreImagen = null;		                        
+
+		                    } 
+		                    catch (Exception e1) {
+		                        //System.err.println("Datos NO guardados");
+		                    } finally{
+		                        try {
+		                            archivo.close();
+		                        } catch (IOException e1) {
+		                            System.err.println("ERROR");
+		                        }
+		                    }
+						}
+
+				}
+				else{
+					JOptionPane.showMessageDialog(null, "Llene todos los campos.",null,JOptionPane.ERROR_MESSAGE);
+                }
+			}
+        	
+        });
+
         panel.add(aceptar);
 
         JButton cancelar = new JButton("C A N C E L A R");
