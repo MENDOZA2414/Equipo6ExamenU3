@@ -1,4 +1,7 @@
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+
 import java.awt.Dimension;
 import java.awt.Image;
 import java.util.ArrayList;
@@ -11,6 +14,8 @@ public class ConsultarPlatillos {
 	private Dimension tamaño = new Dimension(300, 200);
     private int x = 0;
     private int y= 30;
+
+    private JPanel panel;
     private JPanel panelPrincipal;
     private int separacion_y = 230;
     private int separacion_x = 300;
@@ -18,13 +23,25 @@ public class ConsultarPlatillos {
     private JButton ultimoPlatillo;
     private JButton platilloNuevo;
     private boolean masMenosScroll = false;
+    JScrollPane scrollPane;
     
-	public ConsultarPlatillos(JPanel panelPrincipal) {
-		this.panelPrincipal = panelPrincipal;
+	public ConsultarPlatillos() {
 		platillos();
 	}
 
 	public void platillos() {
+		panel = new JPanel();
+        panel.setLayout(null);
+        panel.setPreferredSize(new Dimension(1180, 732));
+        scrollPane = new JScrollPane(panel);
+        scrollPane.setBounds(0, 0, 1000, 732);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        JScrollBar verticalScrollBar = scrollPane.getVerticalScrollBar();
+        verticalScrollBar.setUnitIncrement(20);
+        scrollPane.revalidate();
+        scrollPane.setViewportView(panel);
+        
 		for(int i = 0; i < 3; i++) {
 			for(int j = 0; j < 3; j++) {
 				JButton platillo = new JButton();
@@ -49,11 +66,19 @@ public class ConsultarPlatillos {
 					x = 0;
 					y += separacion_y;
 				}
-				panelPrincipal.add(platillo);
+				
+				panel.add(platillo);
 			}
 		}
+		
 	}
-
+	
+	public void agregarPanel(JPanel panelPrincipal) {
+    	this.panelPrincipal = panelPrincipal;
+    	panelPrincipal.add(scrollPane);
+    	panelPrincipal.repaint();
+    }
+	
 	public void agregarPlatillo() {
 		ultimoPlatillo = botones.get(botones.size()-1);
 		platilloNuevo = new JButton();
@@ -87,8 +112,8 @@ public class ConsultarPlatillos {
 		
 		botones.add(platilloNuevo);
 		ultimoPlatillo = botones.get(botones.size()-1);
-		panelPrincipal.add(platilloNuevo);
-		panelPrincipal.repaint();
+		panel.add(platilloNuevo);
+		panel.repaint();
 	}
 	
 	public void eliminarPlatillo(JButton boton) {
@@ -105,14 +130,14 @@ public class ConsultarPlatillos {
 			if(i != botones.size()-1){
 				botones.get(i).setText(botones.get(i+1).getText());
 			}
-			panelPrincipal.repaint();
+			panel.repaint();
 		}
 		
-		panelPrincipal.remove(botones.get(botones.size()-1));
+		panel.remove(botones.get(botones.size()-1));
 		
 		botones.remove(botones.get(botones.size()-1));
 		ultimoPlatillo = botones.get(botones.size()-1);
-		panelPrincipal.repaint();
+		panel.repaint();
 	}
 
 	public JButton getPlatilloNuevo() {
@@ -127,4 +152,22 @@ public class ConsultarPlatillos {
 	public ArrayList<JButton> getBotones() {
 		return botones;
 	}
+
+	public JPanel getPanel() {
+		return panel;
+	}
+
+	public void setPanel(JPanel panel) {
+		this.panel = panel;
+	}
+
+	public JScrollPane getScrollPane() {
+		return scrollPane;
+	}
+
+	public void setScrollPane(JScrollPane scrollPane) {
+		this.scrollPane = scrollPane;
+	}
+	
+	
 }
