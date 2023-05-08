@@ -35,11 +35,12 @@ public class FormularioCrear{
 	JPanel panel;
 	JPanel panelPrincipal;
     JTextArea descripcion;
-    JScrollPane scrollPane;
+    JScrollPane scrollPaneJArea;
     String nombreImagen;
     JButton aceptar;
-    boolean crear;
-    
+    JTextField nombre;
+    JTextField precio;
+    JComboBox<String> categoria;
 	public FormularioCrear(JPanel panel){
 
         this.panel = panel;
@@ -53,23 +54,23 @@ public class FormularioCrear{
         tP.setFont(new Font(" ",Font.BOLD, 18));
         panel.add(tP);
 
-        JTextField nombre = new JTextField("Nombre del platillo");
+        nombre= new JTextField("Nombre del platillo");
         nombre.setBounds(107, 70, 285, 30);
         nombre.setForeground(Color.decode("#737373"));
         panel.add(nombre);
 
-        scrollPane = new JScrollPane();
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPaneJArea = new JScrollPane();
+        scrollPaneJArea.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         descripcion = new JTextArea(" Agrega descripcion del platillo");
         descripcion.setBounds(107, 110, 285, 90);
         descripcion.setForeground(Color.decode("#737373"));
 
-        scrollPane.setBounds(107, 110, 285, 90);
-        scrollPane.getViewport().setBackground(Color.WHITE);
-        scrollPane.getViewport().add(descripcion);
-        panel.add(scrollPane);
+        scrollPaneJArea.setBounds(107, 110, 285, 90);
+        scrollPaneJArea.getViewport().setBackground(Color.WHITE);
+        scrollPaneJArea.getViewport().add(descripcion);
+        panel.add(scrollPaneJArea);
 
-        JComboBox<String> categoria = new JComboBox<>();
+        categoria = new JComboBox<>();
         categoria.setBounds(107, 210, 285, 30);
         categoria.setForeground(Color.decode("#737373"));
         categoria.addItem("Bebidas");
@@ -77,7 +78,7 @@ public class FormularioCrear{
         categoria.addItem("Postres");
         panel.add(categoria);
 
-        JTextField precio = new JTextField("");
+        precio = new JTextField("");
         AbstractDocument doc = (AbstractDocument) precio.getDocument();
 
         doc.setDocumentFilter(new DocumentFilter() {
@@ -141,6 +142,7 @@ public class FormularioCrear{
 	                }
 
 	                JOptionPane.showMessageDialog(panel, "La imagenen se han guardado exitosamente en disco y se han mostrado en la interfaz de usuario.");
+	                
 	            } catch (IOException ex) {
 	                ex.printStackTrace();
 	            }
@@ -153,80 +155,6 @@ public class FormularioCrear{
         aceptar.setOpaque(true);
         aceptar.setBackground(Color.green);
 
-        aceptar.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				
-				String nombrePlatillo = nombre.getText();   //Label.gettext
-				String descripcion = ((JTextArea)scrollPane.getViewport().getView()).getText();   //Label.gettext
-				String category = (String) categoria.getSelectedItem(); //combobox.getSelectedItem
-				String preci0 = precio.getText();
-				String rutaImagen = nombreImagen;
-                System.out.println(rutaImagen);
-				
-				FileWriter archivo = null;
-                PrintWriter editor = null;
-                String[] data;
-				boolean encontrado = false;
-				
-				if(!nombrePlatillo.isEmpty()&&!descripcion.isEmpty()&&!category.isEmpty()&&!preci0.isEmpty()&&!rutaImagen.isEmpty()) {
-					
-					String renglon;
-
-						try (BufferedReader BR = new BufferedReader(new FileReader("src/platillos.txt"))){
-							
-							while((renglon = BR.readLine()) != null ){
-
-								data = renglon.split(",");
-
-								if (data[0].equals(nombrePlatillo)){
-
-									JOptionPane.showMessageDialog(null, "Platillo ya existente.","ERROR!", JOptionPane.ERROR_MESSAGE);
-									encontrado = true;
-									crear = false;
-								}
-							}
-						} catch (HeadlessException | IOException e1) {
-							e1.printStackTrace();
-						}
-						
-						if(!encontrado){
-							try {
-								
-								JOptionPane.showMessageDialog(null, "Platillo creado","Listo!", JOptionPane.INFORMATION_MESSAGE);
-		                        archivo = new FileWriter("src/platillos.txt",true);
-		                        editor = new PrintWriter(archivo);
-
-		                        editor.print(nombrePlatillo + "," + descripcion + "," + category + "," + preci0 + "," + rutaImagen + "," + "\n");
-		                        
-		                        nombre.setText(null);
-		                        ((JTextArea)scrollPane.getViewport().getView()).setText(null);
-		        				//Emaildata.setText(null);
-		        				precio.setText(null);
-		        				nombreImagen = null;		                        
-		        				
-		                    } 
-		                    catch (Exception e1) {
-		                    	crear = true;
-		                        //System.err.println("Datos NO guardados");
-		                    } finally{
-		                        try {
-		                            archivo.close();
-		                        } catch (IOException e1) {
-		                            System.err.println("ERROR");
-		                        }
-		                    }
-						}
-					
-				}
-				else{
-					JOptionPane.showMessageDialog(null, "Llene todos los campos.",null,JOptionPane.ERROR_MESSAGE);
-					crear = false;
-                }
-			}
-        	
-        });
-
         panel.add(aceptar);
 
         JButton cancelar = new JButton("C A N C E L A R");
@@ -238,11 +166,16 @@ public class FormularioCrear{
         panel.repaint();
     }
 	
+	public void datosPlatillo(String nombre, String descripcion, String categoria, String precio, String ruta) {
+		
+	}
+	
 	public JButton getAceptar() {
 		return aceptar;
 	}
+	
 
-    public void agregarPanel(JPanel panelPrincipal) {
+	public void agregarPanel(JPanel panelPrincipal) {
     	this.panelPrincipal = panelPrincipal;
     	panelPrincipal.add(panel);
     	panelPrincipal.repaint();
@@ -258,8 +191,57 @@ public class FormularioCrear{
         return panel;
     }
 
-	public boolean isCrear() {
-		return crear;
+	public JTextArea getDescripcion() {
+		return descripcion;
 	}
-    
+
+	public void setDescripcion(JTextArea descripcion) {
+		this.descripcion = descripcion;
+	}
+
+	public JScrollPane getScrollPaneJArea() {
+		return scrollPaneJArea;
+	}
+
+	public void setScrollPaneJArea(JScrollPane scrollPaneJArea) {
+		this.scrollPaneJArea = scrollPaneJArea;
+	}
+
+	public String getNombreImagen() {
+		return nombreImagen;
+	}
+
+	public void setNombreImagen(String nombreImagen) {
+		this.nombreImagen = nombreImagen;
+	}
+
+	public void setAceptar(JButton aceptar) {
+		this.aceptar = aceptar;
+	}
+
+	public JTextField getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(JTextField nombre) {
+		this.nombre = nombre;
+	}
+
+	public JTextField getPrecio() {
+		return precio;
+	}
+
+	public void setPrecio(JTextField precio) {
+		this.precio = precio;
+	}
+
+	public JComboBox<String> getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(JComboBox<String> categoria) {
+		this.categoria = categoria;
+	}
+	
+
 }
