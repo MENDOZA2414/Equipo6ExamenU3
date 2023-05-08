@@ -401,6 +401,8 @@ public class Ventana extends JFrame {
 					System.out.println("Crear");
 					removerPlatillos(scrollPane);
 					crearPlatillo.agregarPanel(panelPrincipal);
+                    crearPlatillo.getPanel().repaint();
+                    crearPlatillo.getPanel().revalidate();
 					panelPrincipal.repaint();
 				}
 				else if(modulo.getText().equals("ORDENES")){

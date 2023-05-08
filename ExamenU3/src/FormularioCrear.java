@@ -123,9 +123,8 @@ public class FormularioCrear{
         cancelar.setOpaque(true);
         cancelar.setBackground(Color.red);
         panel.add(cancelar);
-
-        panel.repaint();
         
+        panel.repaint();
     }
     
     public void agregarPanel(JPanel panelPrincipal) {
@@ -140,7 +139,7 @@ public class FormularioCrear{
     	panelPrincipal.repaint();
     }
 
-    public JScrollPane getSP(){
-        return scrollPane;
+    public JPanel getPanel(){
+        return panel;
     }
 }
