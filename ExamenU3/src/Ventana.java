@@ -12,12 +12,14 @@ import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JWindow;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 
 public class Ventana extends JFrame {
     JFrame frame = (this);
@@ -137,6 +139,8 @@ public class Ventana extends JFrame {
         exit.setVisible(true);
         salir.setVisible(true);
         mensaje.setVisible(true);
+        
+
         inicio.getplatillosboton().addActionListener(new ActionListener() {
 
             @Override
@@ -168,7 +172,8 @@ public class Ventana extends JFrame {
             	panelBarra.repaint();
             }
         });
-
+        consultarOrden = new ConsultarOrden(frame);
+        
         repaint();
   	}
     
@@ -201,6 +206,7 @@ public class Ventana extends JFrame {
                     remove(panelMenu);
                     remove(panelPrincipal);
                     logo.setVisible(false);
+                    consultarOrden.remover();
                     mostrarInicio();
                     repaint();
 
@@ -276,8 +282,8 @@ public class Ventana extends JFrame {
         scrollPane.setBounds(0, 0, 1000, 732);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-       
+        JScrollBar verticalScrollBar = scrollPane.getVerticalScrollBar();
+        verticalScrollBar.setUnitIncrement(20);
         ConsultarPlatillos platillos = new ConsultarPlatillos(panel);
         scrollPane.revalidate();
         scrollPane.setViewportView(panel);
@@ -309,24 +315,24 @@ public class Ventana extends JFrame {
 
                         JWindow window = new JWindow();
                         window.add(new JLabel("Contenido de la ventana emergente"));
-                        window.setSize(400,400);
+                        window.setSize(300,300);
                         window.setBackground(Color.WHITE);
 
                         platillos.getBotones().get(i).addActionListener(new ActionListener() {
 
                             @Override
                             public void actionPerformed(ActionEvent e) {
-                                window.setLocationRelativeTo((JButton)e.getSource());
-                                window.setVisible(true);
-                                window.addMouseListener(new MouseAdapter() {
+                            	window.setLocationRelativeTo((JButton)e.getSource());
+                            	window.setVisible(true);
+                            	window.addMouseListener(new MouseAdapter() {
                                     public void mouseEntered(MouseEvent e) {
-                                        window.setVisible(true);
+                                    	window.setVisible(true);
                                         //((JButton)(e.getSource())).setEnabled(false);
                                         panelPrincipal.repaint();
                                     }
 
                                     public void mouseExited(MouseEvent e) {
-                                        window.setVisible(false);
+                                    	window.setVisible(false);
                                         panelPrincipal.repaint();
                                     }
                                 });
@@ -335,12 +341,12 @@ public class Ventana extends JFrame {
                     }
                 }
                 else if(modulo.getText().equals("ORDENES")){
-                    consultarOrden = new ConsultarOrden(frame);
+                    
                     System.out.println("Entro a panel de consultarordenes");
-                    remove(panelPrincipal);
-                    if(consultarOrden.getTitleTxt().equals("Editar Orden")){
-                        consultarOrden.setTitleTxt("Consultar Orden");
-                    }
+                    remove(panelPrincipal);       
+                    consultarOrden.setTitleTxt("Consultar Orden");
+                    consultarOrden.agregarPanel();
+                    
                 }
 
                 repaint();
@@ -362,12 +368,12 @@ public class Ventana extends JFrame {
         botoncrear.setBorderPainted(false);
         botoncrear.setFocusPainted(false);
       
-        for(int i = 0; i < platillos.getBotones().size(); i++) {
+        /*for(int i = 0; i < platillos.getBotones().size(); i++) {
         	platillos.getBotones().get(i).addActionListener(new ActionListener() {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					platillos.eliminarPlatillo((JButton)e.getSource());
+					//platillos.eliminarPlatillo((JButton)e.getSource());
 					if(platillos.isMasMenosScroll()) {
 						panel.setPreferredSize(new Dimension(1180, y-=250));
 					}
@@ -376,7 +382,7 @@ public class Ventana extends JFrame {
         		
         	});
 		}
-		
+		*/ //ELIMINAR PLATILLOS
         
         botoncrear.addActionListener(new ActionListener() {
 
@@ -388,12 +394,31 @@ public class Ventana extends JFrame {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						platillos.eliminarPlatillo((JButton)e.getSource());
-						if(platillos.isMasMenosScroll()) {
+						//platillos.eliminarPlatillo((JButton)e.getSource());
+						/*if(platillos.isMasMenosScroll()) {
 							panel.setPreferredSize(new Dimension(1180, y-=250));
-						}
+						}*/
 						scrollPane.revalidate();
-					}
+						
+						JWindow window = new JWindow();
+                        window.add(new JLabel("Contenido de la ventana emergente"));
+                        window.setSize(300,300);
+                        window.setBackground(Color.WHITE);
+
+                        window.setLocationRelativeTo((JButton)e.getSource());
+                        window.setVisible(true);
+                        window.addMouseListener(new MouseAdapter() {
+                            public void mouseEntered(MouseEvent e) {
+                                window.setVisible(true);
+                                panelPrincipal.repaint();
+                            }
+
+                            public void mouseExited(MouseEvent e) {
+                                window.setVisible(false);
+                                panelPrincipal.repaint();
+                            }
+                        });
+                     }
 					
 				});
 				if(platillos.isMasMenosScroll()) {
@@ -426,9 +451,9 @@ public class Ventana extends JFrame {
                     //aqui entra el editar platillos
                 }
                 else if(modulo.getText().equals("ORDENES")){
-                    consultarOrden = new ConsultarOrden(frame);
-                    remove(panelPrincipal);
+                   // consultarOrden = new ConsultarOrden(frame);
                     consultarOrden.getTitleLabel().setText("Editar Orden");
+                    consultarOrden.agregarPanel();
                 }
                 
 			}

@@ -72,14 +72,18 @@ public class ConsultarOrden {
         
         panel.add(btnBuscar);
         panel.add(ordenConsultada);
-        panel.add(imagen);
-        frame.getContentPane().add(panel);
+        panel.add(imagen);  
     }
-
+    
+    public void agregarPanel() {
+    	frame.getContentPane().add(panel);
+    	panel.repaint();
+        frame.repaint();
+    }
     public void remover() {
     	frame.remove(panel);
         panel.repaint();
-      
+        frame.repaint();
     }
 
     public JButton getButtonBuscar(){
