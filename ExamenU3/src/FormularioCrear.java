@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,6 +15,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -23,45 +25,53 @@ public class FormularioCrear{
 
 	JPanel panel;
 	JPanel panelPrincipal;
+    JTextArea descripcion;
+    JScrollPane scrollPane;
 
     public FormularioCrear(JPanel panel){
 
         this.panel = panel;
         panel.setLayout(null);
-        panel.setBounds(242, 100, 500, 500);//MEDIDA DEL PANEL PRINCIPAL
+        panel.setBounds(242, 40, 500, 500);//MEDIDA DEL PANEL PRINCIPAL
         panel.setBackground(Color.decode("#C7C7C7"));
 
         JLabel tP = new JLabel("Crear Platillo",JLabel.CENTER);
-        tP.setBounds(190, 0, 120, 30);
-        tP.setForeground(Color.decode("#737373"));
+        tP.setBounds(190, 20, 120, 30);
+        tP.setForeground(Color.decode("#4D4D4D"));
         tP.setFont(new Font(" ",Font.BOLD, 18));
         panel.add(tP);
 
         JTextField nombre = new JTextField("Nombre del platillo");
-        nombre.setBounds(157, 50, 185, 30);
+        nombre.setBounds(107, 70, 285, 30);
         nombre.setForeground(Color.decode("#737373"));
         panel.add(nombre);
 
-        JTextArea des = new JTextArea(" Agrega descripcion del platillo");
-        des.setBounds(157, 100, 185, 70);
-        des.setForeground(Color.decode("#737373"));
-        panel.add(des);
+        scrollPane = new JScrollPane();
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        descripcion = new JTextArea(" Agrega descripcion del platillo");
+        descripcion.setBounds(107, 110, 285, 90);
+        descripcion.setForeground(Color.decode("#737373"));
+
+        scrollPane.setBounds(107, 110, 285, 90);
+        scrollPane.getViewport().setBackground(Color.WHITE);
+        scrollPane.getViewport().add(descripcion);
+        panel.add(scrollPane);
 
         JComboBox<String> categoria = new JComboBox<>();
-        categoria.setBounds(157, 190, 185, 30);
+        categoria.setBounds(107, 210, 285, 30);
         categoria.setForeground(Color.decode("#737373"));
         categoria.addItem("Bebidas");
         categoria.addItem("Alimentos");
         categoria.addItem("Postres");
         panel.add(categoria);
 
-        JTextField precio = new JTextField("Precio");
-        precio.setBounds(157, 240, 185, 30);
+        JTextField precio = new JTextField("$");
+        precio.setBounds(107, 260, 285, 30);
         precio.setForeground(Color.decode("#737373"));
         panel.add(precio);
 
         JButton agFoto = new JButton("Agregar foto");
-        agFoto.setBounds(157, 290, 185, 30);
+        agFoto.setBounds(107, 310, 285, 30);
         panel.add(agFoto);
         
         agFoto.addActionListener(new ActionListener() {
@@ -103,13 +113,13 @@ public class FormularioCrear{
         });
 
         JButton aceptar = new JButton("A C E P T A R");
-        aceptar.setBounds(130, 340, 110, 30);
+        aceptar.setBounds(107, 360, 135, 30);
         aceptar.setOpaque(true);
         aceptar.setBackground(Color.green);
         panel.add(aceptar);
 
         JButton cancelar = new JButton("C A N C E L A R");
-        cancelar.setBounds(257, 340, 117, 30);
+        cancelar.setBounds(257, 360, 135, 30);
         cancelar.setOpaque(true);
         cancelar.setBackground(Color.red);
         panel.add(cancelar);
@@ -128,5 +138,9 @@ public class FormularioCrear{
     public void remover() {
     	panelPrincipal.remove(panel);
     	panelPrincipal.repaint();
+    }
+
+    public JScrollPane getSP(){
+        return scrollPane;
     }
 }
