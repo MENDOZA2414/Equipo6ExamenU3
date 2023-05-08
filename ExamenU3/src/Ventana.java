@@ -48,6 +48,7 @@ public class Ventana extends JFrame {
     int aux;
    
     public boolean crear;
+    public boolean agregar = true;
     
     public Ventana() {
 
@@ -90,7 +91,6 @@ public class Ventana extends JFrame {
 
   	
   	public void mostrarLogin() {
-
   		login = new Login(this);
   		login.agregar();
         login.getIniciarSesion();
@@ -297,7 +297,7 @@ public class Ventana extends JFrame {
         botonconsultar.setContentAreaFilled(false); 
         botonconsultar.setBorderPainted(false);
         botonconsultar.setFocusPainted(false);
-      
+        
         botonconsultar.addActionListener(new ActionListener() {
 
 			@Override
@@ -310,43 +310,49 @@ public class Ventana extends JFrame {
 					if (panelPrincipal.isAncestorOf(platillos.getScrollPane())) {
 						//platillos.agregarPanel(panelPrincipal);
 						System.out.println("NO AGREGAR");
+						
 					}
 					else {
 						System.out.println("AGREGRAR");
 						panelPrincipal.add(platillos.getScrollPane());
+						
 					}
-                   
+                  
                     panelPrincipal.revalidate();
                     panelPrincipal.repaint();
+                    
+                    if(agregar) {
+                    	for(int i = 0; i < platillos.getBotones().size(); i++) {
 
-                    for(int i = 0; i < platillos.getBotones().size(); i++) {
+                            JWindow window = new JWindow();
+                            window.add(new JLabel("Contenido de la ventana emergente"));
+                            window.setSize(300,300);
+                            window.setBackground(Color.WHITE);
 
-                        JWindow window = new JWindow();
-                        window.add(new JLabel("Contenido de la ventana emergente"));
-                        window.setSize(300,300);
-                        window.setBackground(Color.WHITE);
+                            platillos.getBotones().get(i).addActionListener(new ActionListener() {
 
-                        platillos.getBotones().get(i).addActionListener(new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                	window.setLocationRelativeTo((JButton)e.getSource());
+                                	window.setVisible(true);
+                                	window.addMouseListener(new MouseAdapter() {
+                                        public void mouseEntered(MouseEvent e) {
+                                        	window.setVisible(true);
+                                            //((JButton)(e.getSource())).setEnabled(false);
+                                            panelPrincipal.repaint();
+                                        }
 
-                            @Override
-                            public void actionPerformed(ActionEvent e) {
-                            	window.setLocationRelativeTo((JButton)e.getSource());
-                            	window.setVisible(true);
-                            	window.addMouseListener(new MouseAdapter() {
-                                    public void mouseEntered(MouseEvent e) {
-                                    	window.setVisible(true);
-                                        //((JButton)(e.getSource())).setEnabled(false);
-                                        panelPrincipal.repaint();
-                                    }
-
-                                    public void mouseExited(MouseEvent e) {
-                                    	window.setVisible(false);
-                                        panelPrincipal.repaint();
-                                    }
-                                });
-                            }
-                        });
+                                        public void mouseExited(MouseEvent e) {
+                                        	window.setVisible(false);
+                                            panelPrincipal.repaint();
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    	agregar = false;
                     }
+                    
                 }
                 else if(modulo.getText().equals("ORDENES")){
                     
