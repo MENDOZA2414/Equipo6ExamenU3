@@ -1,5 +1,6 @@
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -13,14 +14,16 @@ import java.awt.Font;
 
 public class ConsultarOrden {
     
+    JFrame frame;
     JPanel panel;
     JLabel consultarOrden;
     JTextField ordenConsultada;
     JButton btnBuscar;
     
-    public ConsultarOrden(JPanel panel){
+    public ConsultarOrden(JFrame frame){
 
-        this.panel = panel;
+        this.frame = frame;
+        panel = new JPanel(null);
         panel.setBounds(242, 100, 1180, 732);       //MEDIDA DEL PANEL PRINCIPAL
         panel.setBackground(Color.decode("#EBEBEB"));
         
@@ -70,19 +73,37 @@ public class ConsultarOrden {
         panel.add(btnBuscar);
         panel.add(ordenConsultada);
         panel.add(imagen);
+        frame.getContentPane().add(panel);
+    }
+
+    public void remover() {
+    	frame.remove(panel);
         panel.repaint();
+      
     }
 
     public JButton getButtonBuscar(){
         return btnBuscar;
     }
 
-    public JLabel getTitleTxt(){
+    public String getTitleTxt(){
+        return consultarOrden.getText();
+    }
+
+    public JLabel getTitleLabel(){
         return consultarOrden;
+    }
+
+    public void setTitleTxt(String xd) {
+        consultarOrden.setText(xd);
     }
 
     public String getOrdenConsultada(){
         return ordenConsultada.getText();
+    }
+
+    public JPanel getPanel(){
+        return panel;
     }
 
 }

@@ -1,8 +1,11 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Timer;
@@ -10,12 +13,14 @@ import java.util.TimerTask;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JWindow;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 
 public class Ventana extends JFrame {
+    JFrame frame = (this);
     Login login; 
     Inicio inicio;
     JButton logo;
@@ -26,7 +31,7 @@ public class Ventana extends JFrame {
     private JLabel modulo = new JLabel("", JLabel.CENTER);
     private JPanel panelMenu = new JPanel();
     private JPanel panelBarra = new JPanel();
-    JLabel mensaje ;
+    JLabel mensaje;
 	JButton exit;
 	JLabel salir;
     private int y = 732;
@@ -124,11 +129,6 @@ public class Ventana extends JFrame {
         });
 	}
 
-    public void mostrarConsultarOrdenes() {
-        consultarOrden = new ConsultarOrden(panelPrincipal);
-        repaint();
-    }
-
   	
   	public void mostrarInicio() {
   		inicio = new Inicio(this);
@@ -185,28 +185,28 @@ public class Ventana extends JFrame {
 	    mensaje.setOpaque(false);
         
 	
-	    	logo = new JButton(null, new ImageIcon("Resources/iconoInicio.png"));
-			logo.setBounds(10,10, 80, 80);
-			logo.setContentAreaFilled(false); 
-			logo.setBorderPainted(false);
-			logo.setFocusPainted(false);
-		
-			
-			
-				logo.addActionListener(new ActionListener() {
+        logo = new JButton(null, new ImageIcon("Resources/iconoInicio.png"));
+        logo.setBounds(10,10, 80, 80);
+        logo.setContentAreaFilled(false); 
+        logo.setBorderPainted(false);
+        logo.setFocusPainted(false);
 
-		            @Override
-		            public void actionPerformed(ActionEvent arg0) {
+        
+        
+            logo.addActionListener(new ActionListener() {
 
-		                remove(panelMenu);
-		                remove(panelPrincipal);
-		            	logo.setVisible(false);
-		                mostrarInicio();
-		                repaint();
+                @Override
+                public void actionPerformed(ActionEvent arg0) {
 
-		            }
-		            
-		        });
+                    remove(panelMenu);
+                    remove(panelPrincipal);
+                    logo.setVisible(false);
+                    mostrarInicio();
+                    repaint();
+
+                }
+                
+            });
 				
 				
 		exit = new JButton(null, new ImageIcon("Resources/exit.png"));
@@ -304,11 +304,43 @@ public class Ventana extends JFrame {
                     panelPrincipal.add(scrollPane);
                     panelPrincipal.revalidate();
                     panelPrincipal.repaint();
-                    System.out.println("Entro a panel de consultar platillos");
+
+                    for(int i = 0; i < platillos.getBotones().size(); i++) {
+
+                        JWindow window = new JWindow();
+                        window.add(new JLabel("Contenido de la ventana emergente"));
+                        window.setSize(400,400);
+                        window.setBackground(Color.WHITE);
+
+                        platillos.getBotones().get(i).addActionListener(new ActionListener() {
+
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                window.setLocationRelativeTo((JButton)e.getSource());
+                                window.setVisible(true);
+                                window.addMouseListener(new MouseAdapter() {
+                                    public void mouseEntered(MouseEvent e) {
+                                        window.setVisible(true);
+                                        //((JButton)(e.getSource())).setEnabled(false);
+                                        panelPrincipal.repaint();
+                                    }
+
+                                    public void mouseExited(MouseEvent e) {
+                                        window.setVisible(false);
+                                        panelPrincipal.repaint();
+                                    }
+                                });
+                            }
+                        });
+                    }
                 }
                 else if(modulo.getText().equals("ORDENES")){
+                    consultarOrden = new ConsultarOrden(frame);
                     System.out.println("Entro a panel de consultarordenes");
-                    mostrarConsultarOrdenes();
+                    remove(panelPrincipal);
+                    if(consultarOrden.getTitleTxt().equals("Editar Orden")){
+                        consultarOrden.setTitleTxt("Consultar Orden");
+                    }
                 }
 
                 repaint();
@@ -394,8 +426,9 @@ public class Ventana extends JFrame {
                     //aqui entra el editar platillos
                 }
                 else if(modulo.getText().equals("ORDENES")){
-                    consultarOrden.getTitleTxt().setText("Editar Orden");
-                    mostrarConsultarOrdenes();
+                    consultarOrden = new ConsultarOrden(frame);
+                    remove(panelPrincipal);
+                    consultarOrden.getTitleLabel().setText("Editar Orden");
                 }
                 
 			}
