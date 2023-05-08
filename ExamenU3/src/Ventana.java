@@ -52,7 +52,7 @@ public class Ventana extends JFrame {
         
         pantallaCarga();
         
-        actualizar();
+        
         setVisible(true);
     }
 
@@ -440,7 +440,7 @@ public class Ventana extends JFrame {
                     //aqui entra el editar platillos
                 }
                 else if(modulo.getText().equals("ORDENES")){
-                   // consultarOrden = new ConsultarOrden(frame);
+                    remove(panelPrincipal);
                     consultarOrden.getTitleLabel().setText("Editar Orden");
                     consultarOrden.agregarPanel();
                 }
@@ -450,7 +450,6 @@ public class Ventana extends JFrame {
         
         ImageIcon iconoeditar = new ImageIcon("Resources/editar.png");
         botoneditar.setIcon(iconoeditar);
-
         panelMenu.add(modulo);
         panelMenu.add(botonconsultar);
         panelMenu.add(botoncrear);
@@ -464,16 +463,13 @@ public class Ventana extends JFrame {
 		//panelPrincipal.add(logoimg); LOGO DE FONDO
 		add(panelPrincipal);
         add(panelMenu);
-        actualizar();
+        repaint();
+    	revalidate();
     }
     
     public void removerPlatillos(JScrollPane scrollPane) {
     	panelPrincipal.remove(scrollPane);
     	panelPrincipal.repaint();
-    }
-    public void actualizar(){
-    	repaint();
-    	revalidate();
     }
 
 }
