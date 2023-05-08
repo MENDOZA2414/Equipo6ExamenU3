@@ -1,27 +1,46 @@
 import java.awt.Color;
 import java.awt.Font;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.Scanner;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class Ticket extends JFrame{
 
-	public static String contenido;
-
+	String archivo = "datos.csv";
+	File file = new File("src/ordenes.txt");
+	public String[] valores;
+	
 	public Ticket() {
 		setBounds(242, 100, 1180, 732);
 		setLayout(null);
 		setVisible(true);
 		
-		ConsultarTicket();
+		try {
+			Scanner scanner = new Scanner(file);
+			scanner.useDelimiter(",");
+			
+			while (scanner.hasNextLine()) {
+				String linea = scanner.nextLine();
+				valores = linea.split(",");
+			}
+			scanner.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		//ConsultarTicket();
 		//TicketCrear();
-		//EditarTicket();
+		EditarTicket();
 		
 		JPanel panelBarra = new JPanel();
 		panelBarra.setLayout(null);
@@ -29,23 +48,7 @@ public class Ticket extends JFrame{
         panelBarra.setBackground(Color.decode("#26282B"));
         add(panelBarra);
         
-        try {
-            // Leer el contenido del archivo
-            BufferedReader reader = new BufferedReader(new FileReader("src\\ordenes.txt"));
-            contenido = "";
-           String linea = reader.readLine();
-            while (linea != null) {
-              contenido += linea + "\n";
-              linea = reader.readLine();
-            }
-            reader.close();
-          } catch (Exception e) {
-            e.printStackTrace();
-          }
-        
-        
-        
-        
+
         
 	}
 	
@@ -60,8 +63,8 @@ public class Ticket extends JFrame{
 		JLabel logo = new JLabel(new ImageIcon("Resources/ordenpequeño.png"));
 		logo.setBounds(30, 10, 75, 75);
 		panel.add(logo);
-		System.out.println(contenido);
-		JLabel orden = new JLabel("Orden #" + contenido);
+		
+		JLabel orden = new JLabel("Orden #" + valores[0]);
 		orden.setBounds(130, 20, 200, 60);
 		orden.setFont(new Font("",Font.BOLD,20));
 		panel.add(orden);
@@ -138,7 +141,7 @@ public class Ticket extends JFrame{
 		logo.setBounds(30, 10, 75, 75);
 		paneldentro.add(logo);
 		
-		JLabel orden = new JLabel("Orden #12");
+		JLabel orden = new JLabel("Orden #"  + valores[0]);
 		orden.setBounds(130, 20, 200, 60);
 		orden.setFont(new Font("",Font.BOLD,38));
 		paneldentro.add(orden);
@@ -219,7 +222,7 @@ public class Ticket extends JFrame{
 		logo.setBounds(30, 10, 75, 75);
 		paneldentro.add(logo);
 		
-		JLabel orden = new JLabel("Orden #12");
+		JLabel orden = new JLabel("Orden #"  + valores[0]);
 		orden.setBounds(130, 20, 200, 60);
 		orden.setFont(new Font("",Font.BOLD,38));
 		paneldentro.add(orden);
