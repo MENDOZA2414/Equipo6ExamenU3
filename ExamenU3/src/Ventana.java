@@ -28,6 +28,8 @@ public class Ventana extends JFrame {
     JButton logo;
     JPanel logoimg;
     ConsultarOrden consultarOrden;
+    FormularioCrear crearPlatillo;
+    ConsultarPlatillos platillos;
     private int contador = 0;
     private JPanel panelPrincipal;
     private JLabel modulo = new JLabel("", JLabel.CENTER);
@@ -37,7 +39,7 @@ public class Ventana extends JFrame {
 	JButton exit;
 	JLabel salir;
     private int y = 732;
-    
+    JPanel crearNuevoPlatillo;
     
     public Ventana() {
 
@@ -173,7 +175,8 @@ public class Ventana extends JFrame {
             }
         });
         consultarOrden = new ConsultarOrden(frame);
-        
+        crearNuevoPlatillo = new JPanel();
+        crearPlatillo = new FormularioCrear(crearNuevoPlatillo);
         repaint();
   	}
     
@@ -202,7 +205,7 @@ public class Ventana extends JFrame {
 
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
-
+                	
                     remove(panelMenu);
                     remove(panelPrincipal);
                     logo.setVisible(false);
@@ -284,7 +287,10 @@ public class Ventana extends JFrame {
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         JScrollBar verticalScrollBar = scrollPane.getVerticalScrollBar();
         verticalScrollBar.setUnitIncrement(20);
-        ConsultarPlatillos platillos = new ConsultarPlatillos(panel);
+        
+        if (panel.getParent() != null) {
+        	  platillos = new ConsultarPlatillos(panel);
+		}
         scrollPane.revalidate();
         scrollPane.setViewportView(panel);
 
@@ -307,6 +313,9 @@ public class Ventana extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 
 				if(modulo.getText().equals("PLATILLOS")){
+					if (crearNuevoPlatillo.getParent() != null) {
+						crearPlatillo.remover();
+					}
                     panelPrincipal.add(scrollPane);
                     panelPrincipal.revalidate();
                     panelPrincipal.repaint();
@@ -388,47 +397,20 @@ public class Ventana extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Crear");
-				platillos.agregarPlatillo();
-				platillos.getPlatilloNuevo().addActionListener(new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						//platillos.eliminarPlatillo((JButton)e.getSource());
-						/*if(platillos.isMasMenosScroll()) {
-							panel.setPreferredSize(new Dimension(1180, y-=250));
-						}*/
-						scrollPane.revalidate();
-						
-						JWindow window = new JWindow();
-                        window.add(new JLabel("Contenido de la ventana emergente"));
-                        window.setSize(300,300);
-                        window.setBackground(Color.WHITE);
-
-                        window.setLocationRelativeTo((JButton)e.getSource());
-                        window.setVisible(true);
-                        window.addMouseListener(new MouseAdapter() {
-                            public void mouseEntered(MouseEvent e) {
-                                window.setVisible(true);
-                                panelPrincipal.repaint();
-                            }
-
-                            public void mouseExited(MouseEvent e) {
-                                window.setVisible(false);
-                                panelPrincipal.repaint();
-                            }
-                        });
-                     }
-					
-				});
-				if(platillos.isMasMenosScroll()) {
-					panel.setPreferredSize(new Dimension(1180, y+=250));
+				if(modulo.getText().equals("PLATILLOS")){
+					System.out.println("Crear");
+					removerPlatillos(scrollPane);
+					crearPlatillo.agregarPanel(panelPrincipal);
+					panelPrincipal.repaint();
 				}
-				scrollPane.revalidate();
-			}
-        	
+				else if(modulo.getText().equals("ORDENES")){
+					 
+				}
+			 }
         });
+			
         
+						
         ImageIcon iconocrear = new ImageIcon("Resources/crear.png");
         botoncrear.setIcon(iconocrear);
 
@@ -448,6 +430,13 @@ public class Ventana extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(modulo.getText().equals("PLATILLOS")){
+					if (crearNuevoPlatillo.getParent() != null) {
+						crearPlatillo.remover();
+					}
+					System.out.println("Editar Platillo");
+					removerPlatillos(scrollPane);
+                    panelPrincipal.revalidate();
+                    panelPrincipal.repaint();
                     //aqui entra el editar platillos
                 }
                 else if(modulo.getText().equals("ORDENES")){
@@ -477,7 +466,11 @@ public class Ventana extends JFrame {
         add(panelMenu);
         actualizar();
     }
-
+    
+    public void removerPlatillos(JScrollPane scrollPane) {
+    	panelPrincipal.remove(scrollPane);
+    	panelPrincipal.repaint();
+    }
     public void actualizar(){
     	repaint();
     	revalidate();

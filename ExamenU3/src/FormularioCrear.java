@@ -21,7 +21,7 @@ public class FormularioCrear{
     
 	private static final int NUM_IMAGENES = 1;
 	JPanel panel;
-	
+	JPanel panelPrincipal;
     public FormularioCrear(JPanel panel){
 
         this.panel = panel;
@@ -113,5 +113,17 @@ public class FormularioCrear{
 
         panel.repaint();
         
+    }
+    
+    public void agregarPanel(JPanel panelPrincipal) {
+    	this.panelPrincipal = panelPrincipal;
+    	panelPrincipal.add(panel);
+    	panelPrincipal.repaint();
+        panel.repaint();
+    }
+    
+    public void remover() {
+    	panelPrincipal.remove(panel);
+    	panelPrincipal.repaint();
     }
 }

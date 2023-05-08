@@ -119,7 +119,7 @@ public class ConsultarPlatillos {
 		return platilloNuevo;
 	}
 
-
+	
 	public boolean isMasMenosScroll() {
 		return masMenosScroll;
 	}
