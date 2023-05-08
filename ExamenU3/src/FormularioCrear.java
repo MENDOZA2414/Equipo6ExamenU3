@@ -1,6 +1,5 @@
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -12,47 +11,38 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-public class FormularioCrear extends JFrame{
+public class FormularioCrear{
     
 	private static final int NUM_IMAGENES = 1;
-	JPanel pantalla;
+	JPanel panel;
 	
-    public FormularioCrear(){
+    public FormularioCrear(JPanel panel){
 
-        setBounds(0, 0, 1280, 832);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLayout(null);
-        setBackground(Color.decode("#EBEBEB"));
-
-        pantalla = new JPanel();
-        pantalla.setSize(300, 400);
-        pantalla.setBackground(Color.decode("#DBDBDB"));
-        pantalla.setLocation(470,170);
-        pantalla.setLayout(null);
-        add(pantalla);
+        this.panel = panel;
+        panel.setBounds(242, 100, 1180, 732);       //MEDIDA DEL PANEL PRINCIPAL
+        panel.setBackground(Color.decode("#EBEBEB"));
 
         JLabel tP = new JLabel("Crear Platillo",JLabel.CENTER);
         tP.setBounds(90, 20, 120, 30);
         tP.setForeground(Color.decode("#737373"));
         tP.setFont(new Font(" ",Font.BOLD, 18));
-        pantalla.add(tP);
+        panel.add(tP);
 
         JTextField nombre = new JTextField("Nombre del platillo");
         nombre.setBounds(57, 70, 185, 30);
         nombre.setForeground(Color.decode("#737373"));
-        pantalla.add(nombre);
+        panel.add(nombre);
 
         JTextArea des = new JTextArea(" Agrega descripcion del platillo");
         des.setBounds(57, 120, 185, 70);
         des.setForeground(Color.decode("#737373"));
-        pantalla.add(des);
+        panel.add(des);
 
         JComboBox<String> categoria = new JComboBox<>();
         categoria.setBounds(57, 210, 185, 30);
@@ -60,16 +50,16 @@ public class FormularioCrear extends JFrame{
         categoria.addItem("Bebidas");
         categoria.addItem("Alimentos");
         categoria.addItem("Postres");
-        pantalla.add(categoria);
+        panel.add(categoria);
 
         JTextField precio = new JTextField("Precio");
         precio.setBounds(57, 260, 185, 30);
         precio.setForeground(Color.decode("#737373"));
-        pantalla.add(precio);
+        panel.add(precio);
 
         JButton agFoto = new JButton("Agregar foto");
         agFoto.setBounds(57, 310, 185, 30);
-        pantalla.add(agFoto);
+        panel.add(agFoto);
         
         agFoto.addActionListener(new ActionListener() {
 
@@ -78,11 +68,11 @@ public class FormularioCrear extends JFrame{
 				 // Abrir un cuadro de dialogo para seleccionar las imagenes
 	            JFileChooser fileChooser = new JFileChooser();
 	            fileChooser.setMultiSelectionEnabled(true);
-	            fileChooser.showOpenDialog(pantalla);
+	            fileChooser.showOpenDialog(panel);
 	            File[] selectedFiles = fileChooser.getSelectedFiles();
 
 	            if (selectedFiles.length != NUM_IMAGENES) {
-	                JOptionPane.showMessageDialog(pantalla, "Debe seleccionar " + NUM_IMAGENES + " imagenes.");
+	                JOptionPane.showMessageDialog(panel, "Debe seleccionar " + NUM_IMAGENES + " imagenes.");
 	                return;
 	            }
 
@@ -98,10 +88,10 @@ public class FormularioCrear extends JFrame{
 	                    // Mostrar la imagen en la interfaz de usuario
 	                    ImageIcon icon = new ImageIcon(image);
 	                    JLabel label = new JLabel(icon);
-	                    pantalla.add(label);
+	                    panel.add(label);
 	                }
 
-	                JOptionPane.showMessageDialog(pantalla, "La imagenen se han guardado exitosamente en disco y se han mostrado en la interfaz de usuario.");
+	                JOptionPane.showMessageDialog(panel, "La imagenen se han guardado exitosamente en disco y se han mostrado en la interfaz de usuario.");
 	            } catch (IOException ex) {
 	                ex.printStackTrace();
 	            }
@@ -113,15 +103,15 @@ public class FormularioCrear extends JFrame{
         aceptar.setBounds(30, 360, 110, 30);
         aceptar.setOpaque(true);
         aceptar.setBackground(Color.green);
-        pantalla.add(aceptar);
+        panel.add(aceptar);
 
         JButton cancelar = new JButton("C A N C E L A R");
         cancelar.setBounds(157, 360, 117, 30);
         cancelar.setOpaque(true);
         cancelar.setBackground(Color.red);
-        pantalla.add(cancelar);
+        panel.add(cancelar);
 
-        setVisible(true);
+        panel.repaint();
         
     }
 }

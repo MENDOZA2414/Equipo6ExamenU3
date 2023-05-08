@@ -1,8 +1,6 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.event.ContainerEvent;
-import java.awt.event.ContainerListener;
 
 import javax.swing.*;
 
@@ -12,7 +10,6 @@ public class Inicio {
     private Dimension tamaño = new Dimension(330, 320);
     private int x = 190;
     private int y= 180;
-    private boolean removido = false;
     private Font fuente = new Font("Inter", Font.ITALIC, 25);
     private JButton platillosboton,ordenesBoton;
     

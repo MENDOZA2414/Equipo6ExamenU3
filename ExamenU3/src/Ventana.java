@@ -20,6 +20,7 @@ public class Ventana extends JFrame {
     Inicio inicio;
     JButton logo;
     JPanel logoimg;
+    ConsultarOrden consultarOrden;
     private int contador = 0;
     private JPanel panelPrincipal;
     private JLabel modulo = new JLabel("", JLabel.CENTER);
@@ -122,6 +123,12 @@ public class Ventana extends JFrame {
             
         });
 	}
+
+    public void mostrarConsultarOrdenes() {
+        consultarOrden = new ConsultarOrden(panelPrincipal);
+        repaint();
+    }
+
   	
   	public void mostrarInicio() {
   		inicio = new Inicio(this);
@@ -275,11 +282,7 @@ public class Ventana extends JFrame {
         scrollPane.revalidate();
         scrollPane.setViewportView(panel);
 
-        panelPrincipal.add(scrollPane);
-
-        panelPrincipal.setBackground(Color.decode("#EBEBEB"));
-        
-        panelPrincipal.repaint();	
+        panelPrincipal.setBackground(Color.decode("#EBEBEB"));	
 
         //Boton consultar
         JButton botonconsultar = new JButton("   Consultar");
@@ -296,7 +299,19 @@ public class Ventana extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Consultar");
+
+				if(modulo.getText().equals("PLATILLOS")){
+                    panelPrincipal.add(scrollPane);
+                    panelPrincipal.revalidate();
+                    panelPrincipal.repaint();
+                    System.out.println("Entro a panel de consultar platillos");
+                }
+                else if(modulo.getText().equals("ORDENES")){
+                    System.out.println("Entro a panel de consultarordenes");
+                    mostrarConsultarOrdenes();
+                }
+
+                repaint();
 			}
         	
         });
@@ -375,7 +390,14 @@ public class Ventana extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Editar");
+				if(modulo.getText().equals("PLATILLOS")){
+                    //aqui entra el editar platillos
+                }
+                else if(modulo.getText().equals("ORDENES")){
+                    consultarOrden.getTitleTxt().setText("Editar Orden");
+                    mostrarConsultarOrdenes();
+                }
+                
 			}
         });
         
@@ -397,7 +419,7 @@ public class Ventana extends JFrame {
         add(panelMenu);
         actualizar();
     }
-    
+
     public void actualizar(){
     	repaint();
     	revalidate();
