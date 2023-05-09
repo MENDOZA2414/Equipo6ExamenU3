@@ -25,7 +25,6 @@ public class ConsultarPlatillos {
     private int separacion_x = 340;
     private JButton ultimoPlatillo;
     private JButton platilloNuevo;
-    private boolean masMenosScroll = false;
     JScrollPane scrollPane;
     String[] fila = null;
     
@@ -114,18 +113,18 @@ public class ConsultarPlatillos {
 		if(ultimoPlatillo.getX()==40) {
 			
 			platilloNuevo.setLocation(ultimoPlatillo.getX()+separacion_x,ultimoPlatillo.getY());
-			masMenosScroll = false;
+		
 		}
 		if(botones.size() % 3 == 0) {
 			
 
 			platilloNuevo.setLocation(40,ultimoPlatillo.getY()+ separacion_y);
-			masMenosScroll = true;
+			
 		} 
 	    if(ultimoPlatillo.getX()!=40 && botones.size() % 3 != 0){
 
 			platilloNuevo.setLocation(ultimoPlatillo.getX()+separacion_x,ultimoPlatillo.getY());
-			masMenosScroll = false;
+			
 	    }
 		
 		botones.add(platilloNuevo);
@@ -140,12 +139,7 @@ public class ConsultarPlatillos {
 		ultimoPlatillo = botones.get(botones.size()-1);
 		JButton penultimoPlatillo = botones.get(botones.size()-2);
 		
-		if(penultimoPlatillo.getY()!=ultimoPlatillo.getY()) {
-			masMenosScroll = true;
-		}
-		else{
-			masMenosScroll = false;
-		}
+		
 		for(int i = botones.indexOf(boton); i < botones.size(); i++) {
 			if(i != botones.size()-1){
 				botones.get(i).setText(botones.get(i+1).getText());
@@ -165,9 +159,7 @@ public class ConsultarPlatillos {
 	}
 
 	
-	public boolean isMasMenosScroll() {
-		return masMenosScroll;
-	}
+
 
 	public ArrayList<JButton> getBotones() {
 		return botones;

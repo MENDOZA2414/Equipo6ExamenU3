@@ -2,7 +2,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.HeadlessException;
-import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -16,7 +15,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JWindow;
@@ -26,39 +24,39 @@ import javax.swing.JButton;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
-import javax.swing.JDialog;
-import java.awt.Point;
 
 public class Ventana extends JFrame {
-    JFrame frame = (this);
-    Login login; 
-    Inicio inicio;
-    JButton logo;
-    JPanel logoimg;
-    ConsultarOrden consultarOrden;
-    FormularioCrear formularioCrear;
-    FormularioEditar formularioEditar;
-    ConsultarPlatillos platillos = new ConsultarPlatillos();;
-    private int contador = 0;
-    private JPanel panelPrincipal;
-    private JLabel modulo = new JLabel("", JLabel.CENTER);
+    private static final long serialVersionUID = 1L;
+    
+    private JFrame frame = (this);
     private JPanel panelMenu = new JPanel();
     private JPanel panelBarra = new JPanel();
-    JLabel mensaje;
-	JButton exit;
-	JLabel salir;
-    private int y = 732;
-    JPanel crearNuevoPlatillo;
-    JPanel editarPlatillo;
-    int aux;
-    String[] info = new String[5];
+    private JPanel panelPrincipal;
+    private JPanel logoimg;
+    private JPanel crearNuevoPlatillo;
+    private JPanel editarPlatillo;
     
-    public boolean crear;
-    public boolean editar;
-    public boolean agregar = true;
+    private JLabel modulo = new JLabel("", JLabel.CENTER);
+    private JLabel mensaje;
+    private JLabel salir;
+    
+    private JButton exit;
+    private JButton logo;
+    
+    private Login login; 
+    private Inicio inicio;
+    private ConsultarPlatillos platillos = new ConsultarPlatillos();;
+    private ConsultarOrden consultarOrden;
+    private FormularioCrear formularioCrear;
+    private FormularioEditar formularioEditar;
+  
+    private  String[] info = new String[5];
+    private boolean editar;
+    private boolean agregar = true;
+    private int contador = 0;
     
     public Ventana() {
-
+    	
         setBounds(0, 0, 1280, 832);
         setLayout(null);
         setLocationRelativeTo(null);
@@ -71,12 +69,14 @@ public class Ventana extends JFrame {
     }
 
     public void pantallaCarga() {
+    	
     	Carga carga = new Carga();
 	    add(carga);
 	    Tiempo(carga);
     }
     
   	public void Tiempo(JPanel panelCarga) {
+  		
   		Timer timer = new Timer();
   		TimerTask tarea = new TimerTask() {
   			@Override
@@ -90,14 +90,12 @@ public class Ventana extends JFrame {
   				}
   				System.out.println(contador);
   			}
-
-			
   		};
   		timer.schedule(tarea,0,1000);
   	}
-
   	
   	public void mostrarLogin() {
+  		
   		login = new Login(this);
   		login.agregar();
         login.getIniciarSesion();
@@ -146,15 +144,14 @@ public class Ventana extends JFrame {
         });
 	}
 
-  	
   	public void mostrarInicio() {
+  		
   		inicio = new Inicio(this);
   		agregarBarra();
   		logo.setVisible(false);
         exit.setVisible(true);
         salir.setVisible(true);
         mensaje.setVisible(true);
-        
 
         inicio.getplatillosboton().addActionListener(new ActionListener() {
 
@@ -168,8 +165,7 @@ public class Ventana extends JFrame {
                 salir.setVisible(false);
             	mensaje.setVisible(false);
             	panelBarra.repaint();
-            }
-            
+            } 
         });
 
         inicio.getordenesBoton().addActionListener(new ActionListener() {
@@ -194,47 +190,41 @@ public class Ventana extends JFrame {
         formularioEditar = new FormularioEditar(editarPlatillo);
       
         repaint();
-        
   	}
     
     public void agregarBarra() {
-
+    	
     	panelBarra.setLayout(null);
         panelBarra.setBounds(0, 0, 1280, 100);
         panelBarra.setBackground(Color.decode("#26282B"));
-        
         mensaje = new JLabel("Bienvenido a Burguer Daily fresh " + login.txtfUsuario.getText(), JLabel.LEFT);
 	    mensaje.setFont(new Font("Inter", Font.PLAIN, 18));
 	    mensaje.setBounds(20, 35, 550, 50);
 	    mensaje.setForeground(Color.white);
 	    mensaje.setOpaque(false);
         
-	
         logo = new JButton(null, new ImageIcon("Resources/iconoInicio.png"));
         logo.setBounds(10,10, 80, 80);
         logo.setContentAreaFilled(false); 
         logo.setBorderPainted(false);
         logo.setFocusPainted(false);
 
-        
-        
-            logo.addActionListener(new ActionListener() {
+        logo.addActionListener(new ActionListener() {
 
-                @Override
-                public void actionPerformed(ActionEvent arg0) {
-                	
-                    remove(panelMenu);
-                    remove(panelPrincipal);
-                    logo.setVisible(false);
-                    consultarOrden.remover();
-                    mostrarInicio();
-                    repaint();
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+            	
+                remove(panelMenu);
+                remove(panelPrincipal);
+                logo.setVisible(false);
+                consultarOrden.remover();
+                mostrarInicio();
+                repaint();
 
-                }
-                
-            });
-				
-				
+            }
+            
+        });
+					
 		exit = new JButton(null, new ImageIcon("Resources/exit.png"));
 		exit.setBounds(1200, 10, 60, 60);
 		exit.setOpaque(true);
@@ -261,7 +251,6 @@ public class Ventana extends JFrame {
             }
             
         });
-
         
         salir = new JLabel("Salir", JLabel.LEFT);
         salir.setFont(new Font("Inter", Font.PLAIN, 18));
@@ -275,12 +264,10 @@ public class Ventana extends JFrame {
 	    panelBarra.add(salir);
         add(panelBarra);
         repaint();
-		
     }
  
     public void agregarMenu() {
     	
-    	//panelMenu = new JPanel();
     	panelMenu.setLayout(null);
         panelMenu.setBounds(0, 100, 242, 732);
         panelMenu.setBackground(Color.white);
@@ -296,7 +283,6 @@ public class Ventana extends JFrame {
 
         panelPrincipal.setBackground(Color.decode("#EBEBEB"));	
 
-        //Boton consultar
         JButton botonconsultar = new JButton("   Consultar");
         
         botonconsultar.setBounds(0, 100, 200, 50);
@@ -320,8 +306,6 @@ public class Ventana extends JFrame {
                         formularioEditar.remover();
                     }
 					if (panelPrincipal.isAncestorOf(platillos.getScrollPane())) {
-						//platillos.agregarPanel(panelPrincipal);
-						System.out.println("NO AGREGAR");
 						
 					}
 					else {
@@ -329,16 +313,13 @@ public class Ventana extends JFrame {
 						panelPrincipal.add(platillos.getScrollPane());
 						
 					}
-                  
                     panelPrincipal.revalidate();
                     panelPrincipal.repaint();
                    
                     if(agregar) {
+                    	
                     	for(int i = 0; i < platillos.getBotones().size(); i++) {
-                    		JWindow window = new JWindow();
-                    		
-                    		//datos[i] = platillos.informacionPlatillos(i)[i];
-                    		
+                    		JWindow window = new JWindow();            
                             platillos.getBotones().get(i).addActionListener(new ActionListener() {
 
                                 @Override
@@ -347,30 +328,26 @@ public class Ventana extends JFrame {
                                 	System.out.println("numero boton: " + Integer.parseInt(((JButton)e.getSource()).getText()));
                                 	agregarInfo(window, ((JButton)e.getSource()), platillos.informacionPlatillos(Integer.parseInt(((JButton)e.getSource()).getText())));	
                                 	window.setVisible(true);
+                                	
                                 	window.addMouseListener(new MouseAdapter() {
                                         public void mouseEntered(MouseEvent e) {
-                                        	
                                             panelPrincipal.repaint();
                                         }
 
                                         public void mouseExited(MouseEvent e) {
                                         	window.setVisible(false);
                                             panelPrincipal.repaint();
-                                            
                                         }
                                     });
                                 	if (!panelPrincipal.isAncestorOf(platillos.getScrollPane())) {
                                     	window.setVisible(false);
                 						System.out.println("HACER INVISIBLE");
-                						
                 					}
                                 }
                             }); 
                         }
-                    	agregar = false;
-                    	
-                    }
-                    
+                    	agregar = false;           
+                    } 
                 }
                 else if(modulo.getText().equals("ORDENES")){
                     
@@ -378,18 +355,15 @@ public class Ventana extends JFrame {
                     remove(panelPrincipal);       
                     consultarOrden.setTitleTxt("Consultar Orden");
                     consultarOrden.agregarPanel();
-                    
                 }
 
                 repaint();
-
 			}
         });
         
         ImageIcon icono = new ImageIcon("Resources/lupa.png");
         botonconsultar.setIcon(icono);
         
-        //boton crear//
         JButton botoncrear = new JButton("   Crear");
         
         botoncrear.setBounds(0, 180, 170, 50);
@@ -429,14 +403,12 @@ public class Ventana extends JFrame {
 					formularioCrear.agregarPanel(panelPrincipal);
 					formularioCrear.getPanel().repaint();
 					formularioCrear.getPanel().revalidate();
-					aux++;
 				}
 				else if(modulo.getText().equals("ORDENES")){	 
 				}
 			}
         });
         
-       
         formularioCrear.getAceptar().addActionListener(new ActionListener() {
 
 			@Override
@@ -469,7 +441,6 @@ public class Ventana extends JFrame {
 
 									JOptionPane.showMessageDialog(null, "Platillo ya existente.","ERROR!", JOptionPane.ERROR_MESSAGE);
 									encontrado = true;
-								
 								}
 							}
 						} catch (HeadlessException | IOException e1) {
@@ -479,8 +450,8 @@ public class Ventana extends JFrame {
 						if(!encontrado){
 							
 							editar = true;
+							
 							try {
-								
 								JOptionPane.showMessageDialog(null, "Platillo creado","Listo!", JOptionPane.INFORMATION_MESSAGE);
 		                        archivo = new FileWriter("src/platillos.txt",true);
 		                        editor = new PrintWriter(archivo);
@@ -492,8 +463,6 @@ public class Ventana extends JFrame {
 		        				//Emaildata.setText(null);
 		                        formularioCrear.getPrecio().setText(null);
 		                        formularioCrear.setNombreImagen(null);		            
-	
-		        		
 		                    } 
 		                    catch (Exception e1) {
 		                    	
@@ -506,17 +475,14 @@ public class Ventana extends JFrame {
 		                        }
 		                    }
 						}
-					
 				}
 				else{
 					JOptionPane.showMessageDialog(null, "Llene todos los campos.",null,JOptionPane.ERROR_MESSAGE);
-				
                 }
 				
 				System.out.println("valor crear " + editar);
 				if(editar) {
-					editar = false;
-					//System.out.println("valor crear " + p.isCrear());
+					editar = false;			
 					platillos.agregarPlatillo(formularioCrear.getNombreImagen());
 					panelPrincipal.repaint();
 					System.out.println("Crear");
@@ -530,12 +496,12 @@ public class Ventana extends JFrame {
 							platillos.getScrollPane().revalidate();
 
 							JWindow window = new JWindow();
-							agregarInfo(window, ((JButton)e.getSource()), info);	
-	                        //agregarInfo(window, (JButton)e.getSource());	   
+							agregarInfo(window, ((JButton)e.getSource()), info);		                        
 	                        window.setVisible(true);
+	                        
 	                        window.addMouseListener(new MouseAdapter() {
+	                        	
 	                            public void mouseEntered(MouseEvent e) {
-	                               
 	                                panelPrincipal.repaint();
 	                            }
 	                            
@@ -546,19 +512,14 @@ public class Ventana extends JFrame {
 	                        });
 	                     }
 					});
-					if(platillos.isMasMenosScroll()) {
-						platillos.getPanel().setPreferredSize(new Dimension(1180, y+=250));
-					}
 					platillos.getScrollPane().revalidate();
 				}
 			}
-			
 		});
 						
         ImageIcon iconocrear = new ImageIcon("Resources/crear.png");
         botoncrear.setIcon(iconocrear);
-
-        //boton editar//
+        
         JButton botoneditar = new JButton("   Editar");
         
         botoneditar.setBounds(0, 260, 170, 50);
@@ -581,7 +542,6 @@ public class Ventana extends JFrame {
 					formularioEditar.agregarPanel(panelPrincipal);
 					formularioEditar.getPanel().repaint();
 					formularioEditar.getPanel().revalidate();
-					aux++;
 				}
 				else if(modulo.getText().equals("ORDENES")){	 
 				}
@@ -621,7 +581,6 @@ public class Ventana extends JFrame {
 
 									JOptionPane.showMessageDialog(null, "Platillo ya existente.","ERROR!", JOptionPane.ERROR_MESSAGE);
 									encontrado = true;
-								
 								}
 							}
 						} catch (HeadlessException | IOException e1) {
@@ -644,8 +603,6 @@ public class Ventana extends JFrame {
 		        				//Emaildata.setText(null);
 		                        formularioEditar.getPrecio().setText(null);
 		                        formularioEditar.setNombreImagen(null);		            
-	
-		        		
 		                    } 
 		                    catch (Exception e1) {
 		                    	
@@ -658,11 +615,9 @@ public class Ventana extends JFrame {
 		                        }
 		                    }
 						}
-					
 				}
 				else{
 					JOptionPane.showMessageDialog(null, "Llene todos los campos.",null,JOptionPane.ERROR_MESSAGE);
-				
                 }
 				
 				System.out.println("valor editar " + editar);
@@ -698,14 +653,10 @@ public class Ventana extends JFrame {
 	                        });
 	                     }
 					});
-					if(platillos.isMasMenosScroll()) {
-						platillos.getPanel().setPreferredSize(new Dimension(1180, y+=250));
-					}
+					
 					platillos.getScrollPane().revalidate();
 				}
-				
 			}
-			
 		});
         
         ImageIcon iconoeditar = new ImageIcon("Resources/editar.png");
