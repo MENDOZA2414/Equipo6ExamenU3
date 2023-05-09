@@ -2,6 +2,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 
+import java.awt.Color;
 import java.awt.Dimension;
 
 import java.awt.Image;
@@ -50,15 +51,19 @@ public class ConsultarPlatillos {
         int buttonHeight = 200;
         int columns = 3;
 		int contador = 0;
+		double numPlatillos = cuantosPlatillos();
+		int y_Scroll = 732;
 			for(int i = 0; i < cuantosPlatillos(); i++) {
 				JButton platillo = new JButton(""+contador);
+				platillo.setForeground(new Color(0, 0, 0, 0));
 				contador++;
 				platillo.setBounds(x, y, buttonWidth, buttonHeight);
 				platillo.setOpaque(false); 
 			    platillo.setContentAreaFilled(false); 
 			    platillo.setBorderPainted(false);
 			    platillo.setFocusPainted(false);
-			    ImageIcon icono = new ImageIcon("Resources/monster.png");
+			    informacionPlatillos(i);
+			    ImageIcon icono = new ImageIcon("Resources/"+fila[4]);
 				Image imagen = icono.getImage().getScaledInstance(platillo.getWidth()-30, platillo.getHeight(), Image.SCALE_SMOOTH);
 				icono = new ImageIcon(imagen);
 				platillo.setIcon(icono);
@@ -71,19 +76,30 @@ public class ConsultarPlatillos {
 			        y += buttonHeight + 20;
 			    } else {
 			        x += buttonWidth + 20;
-			    }
-							
+			    }   
 			}
+			if(numPlatillos >= 9) {
+				numPlatillos -= 9;
+			}
+			else {
+				numPlatillos = 0;
+			}
+			 panel.setPreferredSize(new Dimension(1180, y_Scroll + (int) Math.round(((numPlatillos/3)*300))));
+			 scrollPane.revalidate();
+				scrollPane.repaint();
 	}
 	
 	public void agregarPanel(JPanel panelPrincipal) {
     	panelPrincipal.add(scrollPane);
+    	scrollPane.revalidate();
+		scrollPane.repaint();
     	panelPrincipal.repaint();
     }
 	
 	public void agregarPlatillo(String ruta) {
 		ultimoPlatillo = botones.get(botones.size()-1);
-		platilloNuevo = new JButton();
+		platilloNuevo = new JButton("" + (botones.size()));
+		platilloNuevo.setForeground(new Color(0, 0, 0, 0));
 		platilloNuevo.setSize(tamaño);
 		platilloNuevo.setOpaque(false); 
 		platilloNuevo.setContentAreaFilled(false); 
@@ -116,6 +132,8 @@ public class ConsultarPlatillos {
 		ultimoPlatillo = botones.get(botones.size()-1);
 		panel.add(platilloNuevo);
 		panel.repaint();
+		scrollPane.revalidate();
+		scrollPane.repaint();
 	}
 	
 	public void eliminarPlatillo(JButton boton) {

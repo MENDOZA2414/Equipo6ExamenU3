@@ -1,7 +1,6 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Frame;
 import java.awt.HeadlessException;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
@@ -53,8 +52,7 @@ public class Ventana extends JFrame {
     JPanel editarPlatillo;
     int aux;
     String[] info = new String[5];
-   	String[] datos = new String[5];
-   
+    
     public boolean crear;
     public boolean editar;
     public boolean agregar = true;
@@ -318,13 +316,16 @@ public class Ventana extends JFrame {
 					if (crearNuevoPlatillo.getParent() != null) {
 						formularioCrear.remover();
 					}
+					if (editarPlatillo.getParent() != null) {
+                        formularioEditar.remover();
+                    }
 					if (panelPrincipal.isAncestorOf(platillos.getScrollPane())) {
 						//platillos.agregarPanel(panelPrincipal);
 						System.out.println("NO AGREGAR");
 						
 					}
 					else {
-						System.out.println("AGREGRAR");
+						System.out.println("AGREGAR");
 						panelPrincipal.add(platillos.getScrollPane());
 						
 					}
@@ -421,6 +422,9 @@ public class Ventana extends JFrame {
 			
 			public void actionPerformed(ActionEvent e) {
 				if(modulo.getText().equals("PLATILLOS")){
+					if (editarPlatillo.getParent() != null) {
+                        formularioEditar.remover();
+                    }
 					removerPlatillos(platillos.getScrollPane());
 					formularioCrear.agregarPanel(panelPrincipal);
 					formularioCrear.getPanel().repaint();
@@ -443,10 +447,10 @@ public class Ventana extends JFrame {
 				String preci0 = formularioCrear.getPrecio().getText();
 				String rutaImagen = formularioCrear.getNombreImagen();
                 System.out.println(rutaImagen);
-				
+                String[] data = null;
 				FileWriter archivo = null;
                 PrintWriter editor = null;
-                String[] data;
+             
 				boolean encontrado = false;
 				
 				infoPlatillo(nombrePlatillo, descripcion, category, preci0, rutaImagen);
@@ -526,7 +530,7 @@ public class Ventana extends JFrame {
 							platillos.getScrollPane().revalidate();
 
 							JWindow window = new JWindow();
-							
+							agregarInfo(window, ((JButton)e.getSource()), info);	
 	                        //agregarInfo(window, (JButton)e.getSource());	   
 	                        window.setVisible(true);
 	                        window.addMouseListener(new MouseAdapter() {
@@ -547,7 +551,6 @@ public class Ventana extends JFrame {
 					}
 					platillos.getScrollPane().revalidate();
 				}
-				
 			}
 			
 		});
@@ -571,6 +574,9 @@ public class Ventana extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(modulo.getText().equals("PLATILLOS")){
+					if (crearNuevoPlatillo.getParent() != null) {
+                        formularioCrear.remover();
+                    }
 					removerPlatillos(platillos.getScrollPane());
 					formularioEditar.agregarPanel(panelPrincipal);
 					formularioEditar.getPanel().repaint();
@@ -596,6 +602,7 @@ public class Ventana extends JFrame {
 				FileWriter archivo = null;
                 PrintWriter editor = null;
                 String[] data;
+                
 				boolean encontrado = false;
 				
 				infoPlatillo(nombrePlatillo, descripcion, category, preci0, rutaImagen);
@@ -722,21 +729,12 @@ public class Ventana extends JFrame {
     
     public String[] infoPlatillo(String nombre, String descripcion, String categoria, String precio, String ruta) {
 
-        info[0] = nombre;
-        info[1] = descripcion;
-        info[2] = categoria;
-        info[3] = precio;
-        info[4] = ruta;
+        info[0] = "Nombre: " + nombre;
+        info[1] = "Descripción: " + descripcion;
+        info[2] = "Categoría: " + categoria;
+        info[3] = "Precio: $" + precio;
+        info[4] = "Ruta de la imagen: " + ruta;
         return info;
-    }
-    
-    public String[] variablesPlatillo() {
-        datos[0] = "Nombre: ";
-        datos[1] = "Descripción: ";
-        datos[2] = "Categoría: ";
-        datos[3] = "Precio: $";
-        datos[4] = "Ruta de la imagen: ";
-        return datos;
     }
     
     public void agregarInfo(JWindow window, JButton platilloPresionado, String[] platillo) {
