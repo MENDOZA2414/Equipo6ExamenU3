@@ -51,6 +51,7 @@ public class ConsultarPlatillos {
 		int contador = 0;
 		double numPlatillos = cuantosPlatillos();
 		int y_Scroll = 732;
+		
 			for(int i = 0; i < cuantosPlatillos(); i++) {
 				JButton platillo = new JButton(""+contador);
 				platillo.setForeground(new Color(0, 0, 0, 0));
@@ -194,7 +195,6 @@ public class ConsultarPlatillos {
             System.out.println("Error al leer el archivo: " + e.getMessage());
         }
 
-
 		return contador;
 	}
 	
@@ -219,4 +219,35 @@ public class ConsultarPlatillos {
 		return fila;
 	}
 	
+	public String[] editarPlatillo(int numPlatillo,String nombre,String descripcion,String precio, String categoria,String rutaImagen){
+		int contador = -1;
+        String platillos = "src/platillos.txt";
+        String[] data;
+
+        try (BufferedReader lector = new BufferedReader(new FileReader(platillos))) {
+            String linea;
+           
+            while ((linea = lector.readLine()) != null) {
+                contador++;
+                if (contador == numPlatillo) {
+	                fila = linea.split(",");
+					
+					for (int i = 0; i < cuantosPlatillos(); i++) {
+					
+						informacionPlatillos(i);
+						
+						
+						
+	
+					}
+					
+	                break;
+	             }
+            }
+        } catch (IOException e) {
+            System.out.println("Error al leer el archivo: " + e.getMessage());
+        }
+
+		return fila;
+	}
 }

@@ -49,7 +49,7 @@ public class Ventana extends JFrame {
     private ConsultarOrden consultarOrden;
     private FormularioCrear formularioCrear;
     private FormularioEditar formularioEditar;
-  
+    private EditarPlatillos editarPlatillos = new EditarPlatillos();
     private  String[] info = new String[5];
     private boolean editar;
     private boolean agregar = true;
@@ -82,7 +82,7 @@ public class Ventana extends JFrame {
   			@Override
   			public void run() {
   				contador++;
-  				if(contador == 5) {
+  				if(contador == 4) {
   					mostrarLogin();
   					panelCarga.setVisible(false);
                     repaint();
@@ -290,7 +290,6 @@ public class Ventana extends JFrame {
         botonconsultar.setForeground(Color.decode("#6D6D6D"));
         botonconsultar.setOpaque(false); 
         botonconsultar.setContentAreaFilled(false); 
-        botonconsultar.setBorderPainted(false);
         botonconsultar.setFocusPainted(false);
         
         botonconsultar.addActionListener(new ActionListener() {
@@ -304,6 +303,7 @@ public class Ventana extends JFrame {
 					}
 					if (editarPlatillo.getParent() != null) {
                         formularioEditar.remover();
+                        removerPlatillos(platillos.getScrollPane());
                     }
 					if (panelPrincipal.isAncestorOf(platillos.getScrollPane())) {
 						
@@ -371,7 +371,6 @@ public class Ventana extends JFrame {
         botoncrear.setForeground(Color.decode("#6D6D6D"));
         botoncrear.setOpaque(false); 
         botoncrear.setContentAreaFilled(false); 
-        botoncrear.setBorderPainted(false);
         botoncrear.setFocusPainted(false);
       
         /*for(int i = 0; i < platillos.getBotones().size(); i++) {
@@ -400,6 +399,7 @@ public class Ventana extends JFrame {
                         formularioEditar.remover();
                     }
 					removerPlatillos(platillos.getScrollPane());
+					removerPlatillos(editarPlatillos.getScrollPane());
 					formularioCrear.agregarPanel(panelPrincipal);
 					formularioCrear.getPanel().repaint();
 					formularioCrear.getPanel().revalidate();
@@ -527,7 +527,7 @@ public class Ventana extends JFrame {
         botoneditar.setForeground(Color.decode("#6D6D6D"));
         botoneditar.setOpaque(false); 
         botoneditar.setContentAreaFilled(false); 
-        botoneditar.setBorderPainted(false);
+      
         botoneditar.setFocusPainted(false);
       
         botoneditar.addActionListener(new ActionListener() {
@@ -537,11 +537,43 @@ public class Ventana extends JFrame {
 				if(modulo.getText().equals("PLATILLOS")){
 					if (crearNuevoPlatillo.getParent() != null) {
                         formularioCrear.remover();
+                        removerPlatillos(platillos.getScrollPane());
                     }
-					removerPlatillos(platillos.getScrollPane());
-					formularioEditar.agregarPanel(panelPrincipal);
-					formularioEditar.getPanel().repaint();
-					formularioEditar.getPanel().revalidate();
+					if (panelPrincipal.isAncestorOf(platillos.getScrollPane())) {
+						removerPlatillos(platillos.getScrollPane());
+					}
+					if (panelPrincipal.isAncestorOf(editarPlatillos.getScrollPane())) {
+						removerPlatillos(platillos.getScrollPane());
+					}
+					if (editarPlatillo.getParent() != null) {
+                        formularioEditar.remover();
+                        removerPlatillos(platillos.getScrollPane());
+                       
+                    }
+					else {
+						System.out.println("AGREGAR");
+						panelPrincipal.add(editarPlatillos.getScrollPane());
+						
+					}
+					editarPlatillos.getScrollPane().revalidate();
+					//
+					for(int i = 0; i < editarPlatillos.getBotones().size(); i++) {
+						
+						editarPlatillos.getBotones().get(i).addActionListener(new ActionListener() {
+	
+	                        @Override
+	                        public void actionPerformed(ActionEvent e) {
+	                        	platillos.informacionPlatillos(Integer.parseInt(((JButton)e.getSource()).getText()));
+	                        	
+	                        	System.out.println("numero boton: " + Integer.parseInt(((JButton)e.getSource()).getText()));
+	                        	removerPlatillos(editarPlatillos.getScrollPane());
+	        					formularioEditar.agregarPanel(panelPrincipal);
+	        					formularioEditar.getPanel().repaint();
+	        					formularioEditar.getPanel().revalidate();
+	                        }
+	                    }); 
+						editarPlatillos.getScrollPane().revalidate();
+					}
 				}
 				else if(modulo.getText().equals("ORDENES")){	 
 				}
@@ -680,15 +712,19 @@ public class Ventana extends JFrame {
     
     public String[] infoPlatillo(String nombre, String descripcion, String categoria, String precio, String ruta) {
 
-        info[0] = "Nombre: " + nombre;
-        info[1] = "Descripción: " + descripcion;
+        info[0] = nombre;
+        info[1] = descripcion;
         info[2] = "Categoría: " + categoria;
-        info[3] = "Precio: $" + precio;
-        info[4] = "Ruta de la imagen: " + ruta;
+        info[3] = "$" + precio;
+        info[4] = ruta;
         return info;
     }
     
     public void agregarInfo(JWindow window, JButton platilloPresionado, String[] platillo) {
+ 
+        	platillo[3] = "$" + platillo[3];
+    
+ 
     	window.setBackground(new Color(255, 255, 255, 200));
 
         Dimension buttonSize = platilloPresionado.getPreferredSize();
@@ -701,7 +737,7 @@ public class Ventana extends JFrame {
         panel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
         Font font = new Font("Helvetica", Font.BOLD, 16);
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 4; i++) {
             JLabel label = new JLabel(platillo[i]);
             label.setFont(font);
             label.setForeground(Color.decode("#1B2C45"));
