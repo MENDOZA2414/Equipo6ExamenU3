@@ -38,6 +38,7 @@ public class Ventana extends JFrame {
     JPanel logoimg;
     ConsultarOrden consultarOrden;
     FormularioCrear formularioCrear;
+    FormularioEditar formularioEditar;
     ConsultarPlatillos platillos = new ConsultarPlatillos();;
     private int contador = 0;
     private JPanel panelPrincipal;
@@ -49,11 +50,13 @@ public class Ventana extends JFrame {
 	JLabel salir;
     private int y = 732;
     JPanel crearNuevoPlatillo;
+    JPanel editarPlatillo;
     int aux;
     String[] info = new String[5];
    
    
     public boolean crear;
+    public boolean editar;
     public boolean agregar = true;
     
     public Ventana() {
@@ -189,6 +192,8 @@ public class Ventana extends JFrame {
         consultarOrden = new ConsultarOrden(frame);
         crearNuevoPlatillo = new JPanel();
         formularioCrear = new FormularioCrear(crearNuevoPlatillo);
+        editarPlatillo = new JPanel();
+        formularioEditar = new FormularioEditar(editarPlatillo);
       
         repaint();
         
@@ -373,6 +378,73 @@ public class Ventana extends JFrame {
                 }
 
                 repaint();
+                
+
+
+				if(modulo.getText().equals("PLATILLOS")){
+					if (editarPlatillo.getParent() != null) {
+						formularioEditar.remover();
+					}
+					if (panelPrincipal.isAncestorOf(platillos.getScrollPane())) {
+						//platillos.agregarPanel(panelPrincipal);
+						System.out.println("NO AGREGAR");
+						
+					}
+					else {
+						System.out.println("AGREGRAR");
+						panelPrincipal.add(platillos.getScrollPane());
+						
+					}
+                  
+                    panelPrincipal.revalidate();
+                    panelPrincipal.repaint();
+                   
+                    if(agregar) {
+                    	for(int i = 0; i < platillos.getBotones().size(); i++) {
+                    		JWindow window = new JWindow();
+                            
+                            platillos.getBotones().get(i).addActionListener(new ActionListener() {
+
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                	
+                                	agregarInfo(window, (JButton)e.getSource());	
+                                	window.setVisible(true);
+                                	window.addMouseListener(new MouseAdapter() {
+                                        public void mouseEntered(MouseEvent e) {
+                                        	
+                                            panelPrincipal.repaint();
+                                        }
+
+                                        public void mouseExited(MouseEvent e) {
+                                        	window.setVisible(false);
+                                            panelPrincipal.repaint();
+                                            
+                                        }
+                                    });
+                                	if (!panelPrincipal.isAncestorOf(platillos.getScrollPane())) {
+                                    	window.setVisible(false);
+                						System.out.println("HACER INVISIBLE");
+                						
+                					}
+                                }
+                            }); 
+                        }
+                    	agregar = false;
+                    	
+                    }
+                    
+                }
+                else if(modulo.getText().equals("ORDENES")){
+                    
+                    System.out.println("Entro a panel de consultarordenes");
+                    remove(panelPrincipal);       
+                    consultarOrden.setTitleTxt("Consultar Orden");
+                    consultarOrden.agregarPanel();
+                    
+                }
+
+                repaint();
 			}
         	
         });
@@ -466,7 +538,7 @@ public class Ventana extends JFrame {
 						
 						if(!encontrado){
 							
-							crear = true;
+							editar = true;
 							try {
 								
 								JOptionPane.showMessageDialog(null, "Platillo creado","Listo!", JOptionPane.INFORMATION_MESSAGE);
@@ -501,9 +573,9 @@ public class Ventana extends JFrame {
 				
                 }
 				
-				System.out.println("valor crear " + crear);
-				if(crear) {
-					crear = false;
+				System.out.println("valor crear " + editar);
+				if(editar) {
+					editar = false;
 					//System.out.println("valor crear " + p.isCrear());
 					platillos.agregarPlatillo(formularioCrear.getNombreImagen());
 					panelPrincipal.repaint();
@@ -563,23 +635,135 @@ public class Ventana extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(modulo.getText().equals("PLATILLOS")){
-					if (crearNuevoPlatillo.getParent() != null) {
-						formularioCrear.remover();
-					}
-					System.out.println("Editar Platillo");
 					removerPlatillos(platillos.getScrollPane());
-                    panelPrincipal.revalidate();
-                    panelPrincipal.repaint();
-                    //aqui entra el editar platillos
-                }
-                else if(modulo.getText().equals("ORDENES")){
-                    remove(panelPrincipal);
-                    consultarOrden.getTitleLabel().setText("Editar Orden");
-                    consultarOrden.agregarPanel();
-                }
-                
+					formularioEditar.agregarPanel(panelPrincipal);
+					formularioEditar.getPanel().repaint();
+					formularioEditar.getPanel().revalidate();
+					aux++;
+				}
+				else if(modulo.getText().equals("ORDENES")){	 
+				}
 			}
         });
+        
+        formularioEditar.getAceptar().addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String nombrePlatillo = formularioEditar.getNombre().getText();   //Label.gettext
+				String descripcion = ((JTextArea)formularioEditar.getScrollPaneJArea().getViewport().getView()).getText();   //Label.gettext
+				String category = (String) formularioEditar.getCategoria().getSelectedItem(); //combobox.getSelectedItem
+				String preci0 = formularioEditar.getPrecio().getText();
+				String rutaImagen = formularioEditar.getNombreImagen();
+                System.out.println(rutaImagen);
+				
+				FileWriter archivo = null;
+                PrintWriter editor = null;
+                String[] data;
+				boolean encontrado = false;
+				
+				infoPlatillo(nombrePlatillo, descripcion, category, preci0, rutaImagen);
+				
+				if(!nombrePlatillo.isEmpty()&&!descripcion.isEmpty()&&!category.isEmpty()&&!preci0.isEmpty()&&!rutaImagen.isEmpty()) {
+					
+					String renglon;
+
+						try (BufferedReader BR = new BufferedReader(new FileReader("src/platillos.txt"))){
+							
+							while((renglon = BR.readLine()) != null ){
+
+								data = renglon.split(",");
+
+								if (data[0].equals(nombrePlatillo)){
+
+									JOptionPane.showMessageDialog(null, "Platillo ya existente.","ERROR!", JOptionPane.ERROR_MESSAGE);
+									encontrado = true;
+								
+								}
+							}
+						} catch (HeadlessException | IOException e1) {
+							e1.printStackTrace();
+						}
+						
+						if(!encontrado){
+							
+							editar = true;
+							try {
+								
+								JOptionPane.showMessageDialog(null, "Platillo creado","Listo!", JOptionPane.INFORMATION_MESSAGE);
+		                        archivo = new FileWriter("src/platillos.txt",true);
+		                        editor = new PrintWriter(archivo);
+		                        
+		                        editor.print(nombrePlatillo + "," + descripcion + "," + category + "," + preci0 + "," + rutaImagen + "," + "\n");
+		                       
+		                        formularioEditar.getNombre().setText("Nombre del platillo");
+		                        ((JTextArea)formularioEditar.getScrollPaneJArea().getViewport().getView()).setText(null);
+		        				//Emaildata.setText(null);
+		                        formularioEditar.getPrecio().setText(null);
+		                        formularioEditar.setNombreImagen(null);		            
+	
+		        		
+		                    } 
+		                    catch (Exception e1) {
+		                    	
+		                        //System.err.println("Datos NO guardados");
+		                    } finally{
+		                        try {
+		                            archivo.close();
+		                        } catch (IOException e1) {
+		                            System.err.println("ERROR");
+		                        }
+		                    }
+						}
+					
+				}
+				else{
+					JOptionPane.showMessageDialog(null, "Llene todos los campos.",null,JOptionPane.ERROR_MESSAGE);
+				
+                }
+				
+				System.out.println("valor editar " + editar);
+				if(editar) {
+					editar = false;
+					//System.out.println("valor crear " + p.isCrear());
+					platillos.agregarPlatillo(formularioEditar.getNombreImagen());
+					panelPrincipal.repaint();
+					System.out.println("Editar");
+					
+					panelPrincipal.repaint();
+					
+					platillos.getPlatilloNuevo().addActionListener(new ActionListener() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							platillos.getScrollPane().revalidate();
+
+							JWindow window = new JWindow();
+							
+	                        agregarInfo(window, (JButton)e.getSource());	   
+	                        window.setVisible(true);
+	                        window.addMouseListener(new MouseAdapter() {
+	                            public void mouseEntered(MouseEvent e) {
+	                               
+	                                panelPrincipal.repaint();
+	                            }
+	                            
+	                            public void mouseExited(MouseEvent e) {
+	                                window.setVisible(false);
+	                                panelPrincipal.repaint();
+	                            }
+	                        });
+	                     }
+					});
+					if(platillos.isMasMenosScroll()) {
+						platillos.getPanel().setPreferredSize(new Dimension(1180, y+=250));
+					}
+					platillos.getScrollPane().revalidate();
+				}
+				
+			}
+			
+		});
         
         ImageIcon iconoeditar = new ImageIcon("Resources/editar.png");
         botoneditar.setIcon(iconoeditar);
