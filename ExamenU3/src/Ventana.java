@@ -3,6 +3,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.HeadlessException;
+import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -23,8 +24,11 @@ import javax.swing.JWindow;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JButton;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
+import java.awt.Point;
 
 public class Ventana extends JFrame {
     JFrame frame = (this);
@@ -46,6 +50,8 @@ public class Ventana extends JFrame {
     private int y = 732;
     JPanel crearNuevoPlatillo;
     int aux;
+    String[] info = new String[5];
+   
    
     public boolean crear;
     public boolean agregar = true;
@@ -320,37 +326,40 @@ public class Ventana extends JFrame {
                   
                     panelPrincipal.revalidate();
                     panelPrincipal.repaint();
-                    
+                   
                     if(agregar) {
                     	for(int i = 0; i < platillos.getBotones().size(); i++) {
-
-                            JWindow window = new JWindow();
-                            window.add(new JLabel("Contenido de la ventana emergente"));
-                            window.setSize(300,300);
-                            window.setBackground(Color.WHITE);
-
+                    		JWindow window = new JWindow();
+                            
                             platillos.getBotones().get(i).addActionListener(new ActionListener() {
 
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
-                                	window.setLocationRelativeTo((JButton)e.getSource());
+                                	
+                                	agregarInfo(window, (JButton)e.getSource());	
                                 	window.setVisible(true);
                                 	window.addMouseListener(new MouseAdapter() {
                                         public void mouseEntered(MouseEvent e) {
-                                        	window.setVisible(true);
-                                            //((JButton)(e.getSource())).setEnabled(false);
+                                        	
                                             panelPrincipal.repaint();
                                         }
 
                                         public void mouseExited(MouseEvent e) {
                                         	window.setVisible(false);
                                             panelPrincipal.repaint();
+                                            
                                         }
                                     });
+                                	if (!panelPrincipal.isAncestorOf(platillos.getScrollPane())) {
+                                    	window.setVisible(false);
+                						System.out.println("HACER INVISIBLE");
+                						
+                					}
                                 }
-                            });
+                            }); 
                         }
                     	agregar = false;
+                    	
                     }
                     
                 }
@@ -409,7 +418,6 @@ public class Ventana extends JFrame {
 					formularioCrear.getPanel().repaint();
 					formularioCrear.getPanel().revalidate();
 					aux++;
-					
 				}
 				else if(modulo.getText().equals("ORDENES")){	 
 				}
@@ -432,6 +440,8 @@ public class Ventana extends JFrame {
                 PrintWriter editor = null;
                 String[] data;
 				boolean encontrado = false;
+				
+				infoPlatillo(nombrePlatillo, descripcion, category, preci0, rutaImagen);
 				
 				if(!nombrePlatillo.isEmpty()&&!descripcion.isEmpty()&&!category.isEmpty()&&!preci0.isEmpty()&&!rutaImagen.isEmpty()) {
 					
@@ -464,13 +474,13 @@ public class Ventana extends JFrame {
 		                        editor = new PrintWriter(archivo);
 		                        
 		                        editor.print(nombrePlatillo + "," + descripcion + "," + category + "," + preci0 + "," + rutaImagen + "," + "\n");
-		                        
-		                        formularioCrear.getNombre().setText(null);
+		                       
+		                        formularioCrear.getNombre().setText("Nombre del platillo");
 		                        ((JTextArea)formularioCrear.getScrollPaneJArea().getViewport().getView()).setText(null);
 		        				//Emaildata.setText(null);
 		                        formularioCrear.getPrecio().setText(null);
 		                        formularioCrear.setNombreImagen(null);		            
-		                        formularioCrear.setNombreImagen(null);
+	
 		        		
 		                    } 
 		                    catch (Exception e1) {
@@ -495,7 +505,7 @@ public class Ventana extends JFrame {
 				if(crear) {
 					crear = false;
 					//System.out.println("valor crear " + p.isCrear());
-					platillos.agregarPlatillo();
+					platillos.agregarPlatillo(formularioCrear.getNombreImagen());
 					panelPrincipal.repaint();
 					System.out.println("Crear");
 					
@@ -508,25 +518,21 @@ public class Ventana extends JFrame {
 							platillos.getScrollPane().revalidate();
 
 							JWindow window = new JWindow();
-	                        window.add(new JLabel("Contenido de la ventana emergente"));
-	                        window.setSize(300,300);
-	                        window.setBackground(Color.WHITE);
-
-	                        window.setLocationRelativeTo((JButton)e.getSource());
+							
+	                        agregarInfo(window, (JButton)e.getSource());	   
 	                        window.setVisible(true);
 	                        window.addMouseListener(new MouseAdapter() {
 	                            public void mouseEntered(MouseEvent e) {
-	                                window.setVisible(true);
+	                               
 	                                panelPrincipal.repaint();
 	                            }
-
+	                            
 	                            public void mouseExited(MouseEvent e) {
 	                                window.setVisible(false);
 	                                panelPrincipal.repaint();
 	                            }
 	                        });
 	                     }
-
 					});
 					if(platillos.isMasMenosScroll()) {
 						platillos.getPanel().setPreferredSize(new Dimension(1180, y+=250));
@@ -594,10 +600,57 @@ public class Ventana extends JFrame {
     	revalidate();
     }
     
-    public void crearPlatillo() {
-    	
+    public String[] infoPlatillo(String nombre, String descripcion, String categoria, String precio, String ruta) {
+
+        info[0] = nombre;
+        info[1] = descripcion;
+        info[2] = categoria;
+        info[3] = precio;
+        info[4] = ruta;
+        return info;
     }
     
+    public String[] variablesPlatillo() {
+    	String[] datos = new String[5];
+        datos[0] = "Nombre: ";
+        datos[1] = "Descripción: ";
+        datos[2] = "Categoría: ";
+        datos[3] = "Precio: $";
+        datos[4] = "Ruta de la imagen: ";
+        return datos;
+    }
+    
+    public void agregarInfo(JWindow window, JButton platilloPresionado) {
+    	 window.setBackground(new Color(255, 255, 255, 200));
+
+        Dimension buttonSize = platilloPresionado.getPreferredSize();
+  
+        window.setSize(buttonSize.width + 20, buttonSize.height + 20);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBackground(new Color(0, 0, 0, 150)); 
+        panel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+
+        Font font = new Font("Helvetica", Font.BOLD, 16);
+        for (int i = 0; i < 5; i++) {
+            JLabel label = new JLabel(variablesPlatillo()[i] + info[i]);
+            label.setFont(font);
+            label.setForeground(Color.decode("#1B2C45"));
+            panel.add(label);
+        }
+
+        panel.setPreferredSize(new Dimension(buttonSize.width, buttonSize.height));
+
+        window.setContentPane(panel); 
+        window.setOpacity(0.8f); 
+
+        Dimension panelSize = panel.getPreferredSize();
+        window.setLocationRelativeTo(platilloPresionado);
+        panel.setOpaque(false);
+        panel.repaint();
+    }
+
     public void removerPlatillos(JScrollPane scrollPane) {
     	panelPrincipal.remove(scrollPane);
     	panelPrincipal.repaint();

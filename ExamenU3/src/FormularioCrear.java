@@ -165,11 +165,7 @@ public class FormularioCrear{
         
         panel.repaint();
     }
-	
-	public void datosPlatillo(String nombre, String descripcion, String categoria, String precio, String ruta) {
-		
-	}
-	
+
 	public JButton getAceptar() {
 		return aceptar;
 	}

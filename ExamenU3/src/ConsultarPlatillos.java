@@ -79,7 +79,7 @@ public class ConsultarPlatillos {
     	panelPrincipal.repaint();
     }
 	
-	public void agregarPlatillo() {
+	public void agregarPlatillo(String ruta) {
 		ultimoPlatillo = botones.get(botones.size()-1);
 		platilloNuevo = new JButton();
 		platilloNuevo.setSize(tamaño);
@@ -88,7 +88,7 @@ public class ConsultarPlatillos {
 		platilloNuevo.setBorderPainted(false);
 		platilloNuevo.setFocusPainted(false);
 	    
-		ImageIcon icono = new ImageIcon("Resources/monster.png");
+		ImageIcon icono = new ImageIcon("Resources/" + ruta);
 		Image imagen = icono.getImage().getScaledInstance(platilloNuevo.getWidth()-30, platilloNuevo.getHeight(), Image.SCALE_SMOOTH);
 		icono = new ImageIcon(imagen);
 		platilloNuevo.setIcon(icono);
