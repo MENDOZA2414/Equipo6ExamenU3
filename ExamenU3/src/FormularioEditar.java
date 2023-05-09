@@ -2,6 +2,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -75,7 +77,7 @@ public class FormularioEditar {
         categoria.addItem("Postres");
         panel.add(categoria);
 
-        precio = new JTextField("");
+        precio = new JTextField("$");
         AbstractDocument doc = (AbstractDocument) precio.getDocument();
 
         doc.setDocumentFilter(new DocumentFilter() {
@@ -181,7 +183,48 @@ public class FormularioEditar {
         panel.add(borrar);
 
         panel.repaint();
+        listenerTxtf();
     }
+	
+	
+	public void listenerTxtf() {
+		nombre.addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				if(nombre.getText().equals("Nombre del platillo")){
+					nombre.setText(null);
+				}
+			}
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				if(nombre.getText().equals("")) {
+					nombre.setText("Nombre del platillo");					
+				}
+			}
+		});
+		
+		descripcion.addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				if(descripcion.getText().equals(" Agrega descripcion del platillo")){
+					descripcion.setText(null);
+				}
+			}
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				if(descripcion.getText().equals("")) {
+					descripcion.setText(" Agrega descripcion del platillo");					
+				}
+			}
+		});
+	}
+	
+	
+	
 	
 	public JButton getAceptar() {
 		return aceptar;
