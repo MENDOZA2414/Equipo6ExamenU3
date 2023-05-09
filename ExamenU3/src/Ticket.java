@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class Ticket extends JFrame{
-
+	
 	String archivo = "datos.csv";
 	File file = new File("src/ordenes.txt");
 	public String[] valores;

@@ -15,14 +15,10 @@ import javax.swing.JButton;
 public class ConsultarPlatillos {
 	private ArrayList<JButton> botones = new ArrayList<>();
 	private Dimension tamaño = new Dimension(300, 200);
-    private int x = 0;
-    private int y= 30;
 
     private JPanel panel;
-    private JPanel panelPrincipal;
     private int separacion_y = 230;
-    private int separacion_x = 300;
-    private int separacion_x2 = 50;
+    private int separacion_x = 340;
     private JButton ultimoPlatillo;
     private JButton platilloNuevo;
     private boolean masMenosScroll = false;
@@ -44,40 +40,38 @@ public class ConsultarPlatillos {
         verticalScrollBar.setUnitIncrement(20);
         scrollPane.revalidate();
         scrollPane.setViewportView(panel);
-        
+        int x = 20;
+        int y = 20;
+        int buttonWidth = 300;
+        int buttonHeight = 200;
+        int columns = 3;
 		
-			for(int j = 0; j < cuantosPlatillos()+5; j++) {
+			for(int i = 0; i < cuantosPlatillos(); i++) {
 				JButton platillo = new JButton();
-				platillo.setSize(tamaño);
+				platillo.setBounds(x, y, buttonWidth, buttonHeight);
 				platillo.setOpaque(false); 
 			    platillo.setContentAreaFilled(false); 
 			    platillo.setBorderPainted(false);
 			    platillo.setFocusPainted(false);
-			    
-				ImageIcon icono = new ImageIcon("Resources/monster.png");
+			    ImageIcon icono = new ImageIcon("Resources/monster.png");
 				Image imagen = icono.getImage().getScaledInstance(platillo.getWidth()-30, platillo.getHeight(), Image.SCALE_SMOOTH);
 				icono = new ImageIcon(imagen);
 				platillo.setIcon(icono);
-				botones.add(platillo);
-			
-				if(j % 3 == 0) {
-					platillo.setLocation(x += separacion_x2,y);
-				}else {
-					platillo.setLocation(x += separacion_x,y);
-				}
-				if(j % 5 == 0) {
-					x = 0;
-					y += separacion_y;
-				}
 				
-				panel.add(platillo);
+				botones.add(platillo);
+			    panel.add(platillo);
+			    
+			    if ((i + 1) % columns == 0) {
+			        x = 20;
+			        y += buttonHeight + 20;
+			    } else {
+			        x += buttonWidth + 20;
+			    }
+							
 			}
-		
-		
 	}
 	
 	public void agregarPanel(JPanel panelPrincipal) {
-    	this.panelPrincipal = panelPrincipal;
     	panelPrincipal.add(scrollPane);
     	panelPrincipal.repaint();
     }
@@ -96,7 +90,7 @@ public class ConsultarPlatillos {
 		icono = new ImageIcon(imagen);
 		platilloNuevo.setIcon(icono);
 		
-		if(ultimoPlatillo.getX()==50) {
+		if(ultimoPlatillo.getX()==40) {
 			
 			platilloNuevo.setLocation(ultimoPlatillo.getX()+separacion_x,ultimoPlatillo.getY());
 			masMenosScroll = false;
@@ -104,10 +98,10 @@ public class ConsultarPlatillos {
 		if(botones.size() % 3 == 0) {
 			
 
-			platilloNuevo.setLocation(50,ultimoPlatillo.getY()+ separacion_y);
+			platilloNuevo.setLocation(40,ultimoPlatillo.getY()+ separacion_y);
 			masMenosScroll = true;
 		} 
-	    if(ultimoPlatillo.getX()!=50 && botones.size() % 3 != 0){
+	    if(ultimoPlatillo.getX()!=40 && botones.size() % 3 != 0){
 
 			platilloNuevo.setLocation(ultimoPlatillo.getX()+separacion_x,ultimoPlatillo.getY());
 			masMenosScroll = false;
