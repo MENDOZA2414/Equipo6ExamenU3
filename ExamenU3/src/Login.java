@@ -120,6 +120,7 @@ public class Login {
 					txtfContraseña.setText("********");					
 				}
 			}
+			
 		});	
 	}
 	public JButton getIniciarSesion() {

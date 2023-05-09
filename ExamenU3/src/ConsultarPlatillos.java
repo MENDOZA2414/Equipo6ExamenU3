@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
-
 public class ConsultarPlatillos {
 	private ArrayList<JButton> botones = new ArrayList<>();
 	private Dimension tamaño = new Dimension(300, 200);
