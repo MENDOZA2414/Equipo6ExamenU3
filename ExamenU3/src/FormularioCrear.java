@@ -4,6 +4,8 @@ import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -48,7 +50,7 @@ public class FormularioCrear{
         panel.setLayout(null);
         panel.setBounds(242, 40, 500, 500);//MEDIDA DEL PANEL PRINCIPAL
         panel.setBackground(Color.decode("#C7C7C7"));
-
+        
         JLabel tP = new JLabel("Crear Platillo",JLabel.CENTER);
         tP.setBounds(190, 20, 120, 30);
         tP.setForeground(Color.decode("#4D4D4D"));
@@ -60,6 +62,8 @@ public class FormularioCrear{
         nombre.setForeground(Color.decode("#737373"));
         panel.add(nombre);
 
+        
+        
         scrollPaneJArea = new JScrollPane();
         scrollPaneJArea.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         descripcion = new JTextArea(" Agrega descripcion del platillo");
@@ -79,7 +83,7 @@ public class FormularioCrear{
         categoria.addItem("Postres");
         panel.add(categoria);
         
-        precio = new JTextField("");
+        precio = new JTextField("$");
         AbstractDocument doc = (AbstractDocument) precio.getDocument();
 
         doc.setDocumentFilter(new DocumentFilter() {
@@ -155,7 +159,6 @@ public class FormularioCrear{
         aceptar.setBounds(107, 360, 135, 30);
         aceptar.setOpaque(true);
         aceptar.setBackground(Color.green);
-
         panel.add(aceptar);
 
         JButton cancelar = new JButton("C A N C E L A R");
@@ -164,9 +167,49 @@ public class FormularioCrear{
         cancelar.setBackground(Color.red);
         panel.add(cancelar);
         
+        
         panel.repaint();
+        listenerTxtf();
+        
     }
 
+	public void listenerTxtf() {
+		nombre.addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				if(nombre.getText().equals("Nombre del platillo")){
+					nombre.setText(null);
+				}
+			}
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				if(nombre.getText().equals("")) {
+					nombre.setText("Nombre del platillo");					
+				}
+			}
+		});
+		
+		descripcion.addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				if(descripcion.getText().equals(" Agrega descripcion del platillo")){
+					descripcion.setText(null);
+				}
+			}
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				if(descripcion.getText().equals("")) {
+					descripcion.setText(" Agrega descripcion del platillo");					
+				}
+			}
+		});
+		
+	}
+	
 	public JButton getAceptar() {
 		return aceptar;
 	}
@@ -240,6 +283,5 @@ public class FormularioCrear{
 		this.categoria = categoria;
 	}
 	
-    
 
 }
