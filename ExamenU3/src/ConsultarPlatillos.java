@@ -4,6 +4,9 @@ import javax.swing.JScrollPane;
 
 import java.awt.Dimension;
 import java.awt.Image;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
@@ -42,8 +45,8 @@ public class ConsultarPlatillos {
         scrollPane.revalidate();
         scrollPane.setViewportView(panel);
         
-		for(int i = 0; i < 3; i++) {
-			for(int j = 0; j < 3; j++) {
+		
+			for(int j = 0; j < cuantosPlatillos()+5; j++) {
 				JButton platillo = new JButton();
 				platillo.setSize(tamaño);
 				platillo.setOpaque(false); 
@@ -57,19 +60,19 @@ public class ConsultarPlatillos {
 				platillo.setIcon(icono);
 				botones.add(platillo);
 			
-				if(j ==0) {
+				if(j % 3 == 0) {
 					platillo.setLocation(x += separacion_x2,y);
 				}else {
 					platillo.setLocation(x += separacion_x,y);
 				}
-				if(j == 2) {
+				if(j % 5 == 0) {
 					x = 0;
 					y += separacion_y;
 				}
 				
 				panel.add(platillo);
 			}
-		}
+		
 		
 	}
 	
@@ -169,5 +172,22 @@ public class ConsultarPlatillos {
 		this.scrollPane = scrollPane;
 	}
 	
+	public int cuantosPlatillos(){
+		int contador = 0;
+
+        String platillos = "src/platillos.txt";
+
+        try (BufferedReader lector = new BufferedReader(new FileReader(platillos))) {
+            String linea;
+            while ((linea = lector.readLine()) != null) {
+                contador++;
+            }
+        } catch (IOException e) {
+            System.out.println("Error al leer el archivo: " + e.getMessage());
+        }
+
+
+		return contador;
+	}
 	
 }

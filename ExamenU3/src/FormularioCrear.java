@@ -41,6 +41,7 @@ public class FormularioCrear{
     JTextField nombre;
     JTextField precio;
     JComboBox<String> categoria;
+
 	public FormularioCrear(JPanel panel){
 
         this.panel = panel;
@@ -239,5 +240,6 @@ public class FormularioCrear{
 		this.categoria = categoria;
 	}
 	
+    
 
 }
