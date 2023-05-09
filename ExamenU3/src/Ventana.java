@@ -53,7 +53,7 @@ public class Ventana extends JFrame {
     JPanel editarPlatillo;
     int aux;
     String[] info = new String[5];
-   
+   	String[] datos = new String[5];
    
     public boolean crear;
     public boolean editar;
@@ -279,7 +279,7 @@ public class Ventana extends JFrame {
         repaint();
 		
     }
-    
+ 
     public void agregarMenu() {
     	
     	//panelMenu = new JPanel();
@@ -335,13 +335,16 @@ public class Ventana extends JFrame {
                     if(agregar) {
                     	for(int i = 0; i < platillos.getBotones().size(); i++) {
                     		JWindow window = new JWindow();
-                            
+                    		
+                    		//datos[i] = platillos.informacionPlatillos(i)[i];
+                    		
                             platillos.getBotones().get(i).addActionListener(new ActionListener() {
 
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
-                                	
-                                	agregarInfo(window, (JButton)e.getSource());	
+                                	platillos.informacionPlatillos(Integer.parseInt(((JButton)e.getSource()).getText()));
+                                	System.out.println("numero boton: " + Integer.parseInt(((JButton)e.getSource()).getText()));
+                                	agregarInfo(window, ((JButton)e.getSource()), platillos.informacionPlatillos(Integer.parseInt(((JButton)e.getSource()).getText())));	
                                 	window.setVisible(true);
                                 	window.addMouseListener(new MouseAdapter() {
                                         public void mouseEntered(MouseEvent e) {
@@ -378,75 +381,8 @@ public class Ventana extends JFrame {
                 }
 
                 repaint();
-                
 
-
-				if(modulo.getText().equals("PLATILLOS")){
-					if (editarPlatillo.getParent() != null) {
-						formularioEditar.remover();
-					}
-					if (panelPrincipal.isAncestorOf(platillos.getScrollPane())) {
-						//platillos.agregarPanel(panelPrincipal);
-						System.out.println("NO AGREGAR");
-						
-					}
-					else {
-						System.out.println("AGREGRAR");
-						panelPrincipal.add(platillos.getScrollPane());
-						
-					}
-                  
-                    panelPrincipal.revalidate();
-                    panelPrincipal.repaint();
-                   
-                    if(agregar) {
-                    	for(int i = 0; i < platillos.getBotones().size(); i++) {
-                    		JWindow window = new JWindow();
-                            
-                            platillos.getBotones().get(i).addActionListener(new ActionListener() {
-
-                                @Override
-                                public void actionPerformed(ActionEvent e) {
-                                	
-                                	agregarInfo(window, (JButton)e.getSource());	
-                                	window.setVisible(true);
-                                	window.addMouseListener(new MouseAdapter() {
-                                        public void mouseEntered(MouseEvent e) {
-                                        	
-                                            panelPrincipal.repaint();
-                                        }
-
-                                        public void mouseExited(MouseEvent e) {
-                                        	window.setVisible(false);
-                                            panelPrincipal.repaint();
-                                            
-                                        }
-                                    });
-                                	if (!panelPrincipal.isAncestorOf(platillos.getScrollPane())) {
-                                    	window.setVisible(false);
-                						System.out.println("HACER INVISIBLE");
-                						
-                					}
-                                }
-                            }); 
-                        }
-                    	agregar = false;
-                    	
-                    }
-                    
-                }
-                else if(modulo.getText().equals("ORDENES")){
-                    
-                    System.out.println("Entro a panel de consultarordenes");
-                    remove(panelPrincipal);       
-                    consultarOrden.setTitleTxt("Consultar Orden");
-                    consultarOrden.agregarPanel();
-                    
-                }
-
-                repaint();
 			}
-        	
         });
         
         ImageIcon icono = new ImageIcon("Resources/lupa.png");
@@ -591,7 +527,7 @@ public class Ventana extends JFrame {
 
 							JWindow window = new JWindow();
 							
-	                        agregarInfo(window, (JButton)e.getSource());	   
+	                        //agregarInfo(window, (JButton)e.getSource());	   
 	                        window.setVisible(true);
 	                        window.addMouseListener(new MouseAdapter() {
 	                            public void mouseEntered(MouseEvent e) {
@@ -740,7 +676,7 @@ public class Ventana extends JFrame {
 
 							JWindow window = new JWindow();
 							
-	                        agregarInfo(window, (JButton)e.getSource());	   
+	                       // agregarInfo(window, (JButton)e.getSource());	   
 	                        window.setVisible(true);
 	                        window.addMouseListener(new MouseAdapter() {
 	                            public void mouseEntered(MouseEvent e) {
@@ -795,7 +731,6 @@ public class Ventana extends JFrame {
     }
     
     public String[] variablesPlatillo() {
-    	String[] datos = new String[5];
         datos[0] = "Nombre: ";
         datos[1] = "Descripción: ";
         datos[2] = "Categoría: ";
@@ -804,8 +739,8 @@ public class Ventana extends JFrame {
         return datos;
     }
     
-    public void agregarInfo(JWindow window, JButton platilloPresionado) {
-    	 window.setBackground(new Color(255, 255, 255, 200));
+    public void agregarInfo(JWindow window, JButton platilloPresionado, String[] platillo) {
+    	window.setBackground(new Color(255, 255, 255, 200));
 
         Dimension buttonSize = platilloPresionado.getPreferredSize();
   
@@ -818,7 +753,7 @@ public class Ventana extends JFrame {
 
         Font font = new Font("Helvetica", Font.BOLD, 16);
         for (int i = 0; i < 5; i++) {
-            JLabel label = new JLabel(variablesPlatillo()[i] + info[i]);
+            JLabel label = new JLabel(platillo[i]);
             label.setFont(font);
             label.setForeground(Color.decode("#1B2C45"));
             panel.add(label);

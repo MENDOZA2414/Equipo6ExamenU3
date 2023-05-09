@@ -3,14 +3,17 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 
 import java.awt.Dimension;
+
 import java.awt.Image;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+
 
 public class ConsultarPlatillos {
 	private ArrayList<JButton> botones = new ArrayList<>();
@@ -23,6 +26,7 @@ public class ConsultarPlatillos {
     private JButton platilloNuevo;
     private boolean masMenosScroll = false;
     JScrollPane scrollPane;
+    String[] fila = null;
     
 	public ConsultarPlatillos() {
 		platillos();
@@ -45,9 +49,10 @@ public class ConsultarPlatillos {
         int buttonWidth = 300;
         int buttonHeight = 200;
         int columns = 3;
-		
+		int contador = 0;
 			for(int i = 0; i < cuantosPlatillos(); i++) {
-				JButton platillo = new JButton();
+				JButton platillo = new JButton(""+contador);
+				contador++;
 				platillo.setBounds(x, y, buttonWidth, buttonHeight);
 				platillo.setOpaque(false); 
 			    platillo.setContentAreaFilled(false); 
@@ -182,6 +187,27 @@ public class ConsultarPlatillos {
 
 
 		return contador;
+	}
+	
+	public String[] informacionPlatillos(int numPlatillo){
+		int contador = -1;
+        String platillos = "src/platillos.txt";
+        
+        try (BufferedReader lector = new BufferedReader(new FileReader(platillos))) {
+            String linea;
+           
+            while ((linea = lector.readLine()) != null) {
+                contador++;
+                if (contador == numPlatillo) {
+	                 fila = linea.split(",");  
+	                 break;
+	             }
+            }
+        } catch (IOException e) {
+            System.out.println("Error al leer el archivo: " + e.getMessage());
+        }
+
+		return fila;
 	}
 	
 }

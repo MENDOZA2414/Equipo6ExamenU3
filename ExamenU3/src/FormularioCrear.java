@@ -78,7 +78,7 @@ public class FormularioCrear{
         categoria.addItem("Alimentos");
         categoria.addItem("Postres");
         panel.add(categoria);
-
+        
         precio = new JTextField("");
         AbstractDocument doc = (AbstractDocument) precio.getDocument();
 
